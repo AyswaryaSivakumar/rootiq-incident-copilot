@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"surface-tint":"#0053db","inverse-primary":"#b4c5ff","on-secondary-container":"#5c647a","background":"#f8f9ff","tertiary-fixed-dim":"#c0c1ff","inverse-surface":"#213145","on-secondary":"#ffffff","surface-dim":"#cbdbf5","on-primary-container":"#eeefff","primary-fixed":"#dbe1ff","outline-variant":"#c3c6d7","secondary-container":"#dae2fd","surface-container-lowest":"#ffffff","surface-bright":"#f8f9ff","outline":"#737686","on-tertiary-container":"#f1eeff","primary":"#004ac6","surface-container-high":"#dce9ff","on-surface":"#0b1c30","on-primary":"#ffffff","surface-variant":"#d3e4fe","surface-container":"#e5eeff","on-error":"#ffffff","on-surface-variant":"#434655","primary-fixed-dim":"#b4c5ff","on-tertiary-fixed-variant":"#2f2ebe","on-tertiary":"#ffffff","secondary":"#565e74","on-tertiary-fixed":"#07006c","on-primary-fixed-variant":"#003ea8","inverse-on-surface":"#eaf1ff","on-error-container":"#93000a","on-secondary-fixed":"#131b2e","error-container":"#ffdad6","secondary-fixed":"#dae2fd","primary-container":"#2563eb","secondary-fixed-dim":"#bec6e0","on-background":"#0b1c30","error":"#ba1a1a","surface-container-highest":"#d3e4fe","surface-container-low":"#eff4ff","tertiary-container":"#585be6","on-primary-fixed":"#00174b","tertiary":"#3e3fcc","on-secondary-fixed-variant":"#3f465c","surface":"#f8f9ff","tertiary-fixed":"#e1e0ff"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"gutter-lg":"1.5rem","margin-sm":"1rem","space-xs":"0.25rem","space-xl":"1.5rem","space-md":"0.75rem","gutter":"1rem","space-lg":"1rem","margin":"1.5rem","space-sm":"0.5rem","space-2xl":"2rem"},"fontFamily":{"headline-xl":["Inter"],"body-sm":["Inter"],"headline-sm":["Inter"],"code-sm":["JetBrains Mono"],"body-md":["Inter"],"headline-md":["Inter"],"label-sm":["Inter"],"headline-lg":["Inter"],"label-md":["Inter"],"body-lg":["Inter"]},"fontSize":{"headline-xl":["28px",{"lineHeight":"36px","letterSpacing":"-0.02em","fontWeight":"700"}],"body-sm":["12px",{"lineHeight":"18px","fontWeight":"400"}],"headline-sm":["15px",{"lineHeight":"22px","letterSpacing":"-0.005em","fontWeight":"600"}],"code-sm":["12px",{"lineHeight":"16px","fontWeight":"500"}],"body-md":["13px",{"lineHeight":"20px","fontWeight":"400"}],"headline-md":["18px",{"lineHeight":"26px","letterSpacing":"-0.01em","fontWeight":"600"}],"label-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.04em","fontWeight":"600"}],"headline-lg":["22px",{"lineHeight":"30px","letterSpacing":"-0.015em","fontWeight":"600"}],"label-md":["12px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"600"}],"body-lg":["15px",{"lineHeight":"24px","fontWeight":"400"}]}}}}</script></head><body class="bg-background font-body-md text-on-surface antialiased min-h-screen"><aside class="fixed left-0 top-0 bottom-0 w-64 bg-on-background z-50 flex flex-col justify-between p-space-lg select-none shadow-[0_1px_8px_rgba(0,0,0,0.08)]"><div class="flex flex-col gap-space-2xl"><div class="flex items-center gap-space-md px-space-xs"><div class="w-9 h-9 rounded-lg bg-primary-container flex items-center justify-center text-on-primary shadow-sm"><span class="material-symbols-outlined text-[22px]">neurology</span></div><div class="flex flex-col"><span class="font-headline-md text-headline-md text-surface tracking-tight leading-none">RootIQ</span><span class="font-label-sm text-label-sm text-surface-dim uppercase tracking-wider mt-1">RCA Copilot</span></div></div><nav class="flex flex-col gap-space-xs" data-active-classes="bg-primary-container text-on-primary font-headline-sm shadow-sm"><a class="flex items-center gap-space-md px-space-md py-space-sm rounded-lg text-surface-dim font-headline-sm text-headline-sm hover:bg-surface-container-lowest/10 hover:text-surface transition-all" data-path="overview" href="#"><span class="material-symbols-outlined text-[20px]">grid_view</span>Overview</a><a aria-current="page" class="flex items-center gap-space-md px-space-md py-space-sm rounded-lg transition-all bg-primary-container text-on-primary font-headline-sm shadow-sm" data-path="investigations" href="#"><span class="material-symbols-outlined text-[20px]">troubleshoot</span>Investigations</a><a class="flex items-center gap-space-md px-space-md py-space-sm rounded-lg text-surface-dim font-headline-sm text-headline-sm hover:bg-surface-container-lowest/10 hover:text-surface transition-all" data-path="evidence" href="#"><span class="material-symbols-outlined text-[20px]">fact_check</span>Evidence</a><a class="flex items-center gap-space-md px-space-md py-space-sm rounded-lg text-surface-dim font-headline-sm text-headline-sm hover:bg-surface-container-lowest/10 hover:text-surface transition-all" data-path="settings" href="#"><span class="material-symbols-outlined text-[20px]">settings</span>Settings</a></nav></div><div class="pt-space-md"><div class="inline-flex items-center gap-space-sm px-space-md py-space-xs rounded-full bg-surface-container-lowest/10 backdrop-blur-sm"><span class="w-2 h-2 rounded-full bg-secondary-fixed"></span><span class="font-code-sm text-code-sm text-surface-dim">System Online v1.0.0</span></div></div></aside><div class="pl-64"><header class="fixed top-0 left-64 right-0 h-16 bg-surface-container-lowest/90 backdrop-blur-md shadow-[0_1px_8px_rgba(0,0,0,0.03)] z-40 flex items-center justify-between px-space-2xl"><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-xs px-space-sm py-space-xs rounded-lg bg-surface-container-low text-on-surface-variant font-label-md text-label-md"><span class="material-symbols-outlined text-[16px]">verified_user</span>Incident Command Active</div></div><div class="flex items-center gap-space-xl"><button aria-label="Notifications" class="relative p-space-xs rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors" type="button"><span class="material-symbols-outlined text-[22px]">notifications</span><span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-primary-container ring-2 ring-surface-container-lowest"></span></button><div class="flex items-center gap-space-md pl-space-xs"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="flex items-center gap-space-xs cursor-pointer select-none"><span class="font-headline-sm text-headline-sm text-on-surface">Ayswarya</span><span class="material-symbols-outlined text-on-surface-variant text-[18px]">keyboard_arrow_down</span></div></div></div></header><main class="relative pt-16 w-full min-h-screen bg-background px-space-2xl py-space-2xl"><div class="flex flex-col w-full gap-space-xl">
+<!-- Top Banner / Incident Resolution Header -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-lg bg-surface-container-lowest p-space-xl rounded-xl shadow-sm">
+<div class="flex items-start md:items-center gap-space-lg">
+<div class="w-12 h-12 rounded-full bg-secondary-fixed/50 flex items-center justify-center text-primary shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-[28px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-md">
+<h1 class="font-headline-xl text-headline-xl text-on-surface">RCA Report Ready</h1>
+<span class="px-space-sm py-0.5 rounded-full bg-surface-container-high text-primary font-code-sm text-code-sm">INC-001</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mt-0.5">Investigation completed and saved successfully.</p>
+</div>
+</div>
+<!-- Actions Bar -->
+<div class="flex items-center gap-space-md shrink-0">
+<div class="relative">
+<button class="inline-flex items-center gap-space-sm px-space-lg py-space-sm rounded-lg bg-surface-container-lowest text-on-surface font-headline-sm text-headline-sm shadow-sm hover:bg-surface-container-low transition-all" id="downloadDropdownBtn" type="button">
+<span class="material-symbols-outlined text-[18px] text-primary">download</span>
+<span>Download Report</span>
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">keyboard_arrow_down</span>
+</button>
+<!-- Dropdown menu -->
+<div class="hidden absolute right-0 mt-space-xs w-48 bg-surface-container-lowest rounded-lg shadow-xl p-space-xs z-20 flex flex-col gap-0.5" id="downloadMenu">
+<a class="flex items-center gap-space-sm px-space-md py-space-sm rounded text-on-surface hover:bg-surface-container font-body-sm text-body-sm transition-colors" href="#">
+<span class="material-symbols-outlined text-[16px] text-primary">picture_as_pdf</span>
+            PDF Document (.pdf)
+          </a>
+<a class="flex items-center gap-space-sm px-space-md py-space-sm rounded text-on-surface hover:bg-surface-container font-body-sm text-body-sm transition-colors" href="#">
+<span class="material-symbols-outlined text-[16px] text-secondary">description</span>
+            Markdown (.md)
+          </a>
+<a class="flex items-center gap-space-sm px-space-md py-space-sm rounded text-on-surface hover:bg-surface-container font-body-sm text-body-sm transition-colors" href="#">
+<span class="material-symbols-outlined text-[16px] text-tertiary">data_object</span>
+            Raw JSON Spec
+          </a>
+</div>
+</div>
+<button class="inline-flex items-center gap-space-sm px-space-lg py-space-sm rounded-lg bg-primary-container text-on-primary font-headline-sm text-headline-sm shadow-sm hover:opacity-90 transition-opacity" type="button">
+<span class="material-symbols-outlined text-[18px]">share</span>
+<span>Share Postmortem</span>
+</button>
+</div>
+</div>
+<!-- Horizontal Interactive Tab Navigation -->
+<div class="flex items-center justify-between bg-surface-container-lowest px-space-lg pt-space-md rounded-xl shadow-sm">
+<div class="flex items-center gap-space-lg" id="tabContainer">
+<button class="tab-btn pb-space-md font-headline-sm text-headline-sm text-primary transition-colors flex items-center gap-space-xs relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-primary" data-tab="summary" type="button">
+<span class="material-symbols-outlined text-[18px]">summarize</span>
+        Summary
+      </button>
+<button class="tab-btn pb-space-md font-headline-sm text-headline-sm text-on-surface-variant hover:text-on-surface transition-colors flex items-center gap-space-xs relative" data-tab="evidence" type="button">
+<span class="material-symbols-outlined text-[18px]">fact_check</span>
+        Evidence
+        <span class="px-space-xs py-0.5 rounded-full bg-surface-container text-on-surface-variant font-code-sm text-code-sm text-[10px]">10</span>
+</button>
+<button class="tab-btn pb-space-md font-headline-sm text-headline-sm text-on-surface-variant hover:text-on-surface transition-colors flex items-center gap-space-xs relative" data-tab="timeline" type="button">
+<span class="material-symbols-outlined text-[18px]">history</span>
+        Timeline
+      </button>
+<button class="tab-btn pb-space-md font-headline-sm text-headline-sm text-on-surface-variant hover:text-on-surface transition-colors flex items-center gap-space-xs relative" data-tab="actions" type="button">
+<span class="material-symbols-outlined text-[18px]">task_alt</span>
+        Actions
+        <span class="w-2 h-2 rounded-full bg-primary-container"></span>
+</button>
+</div>
+<div class="pb-space-md hidden sm:flex items-center gap-space-sm font-label-sm text-label-sm text-on-surface-variant">
+<span>Generated via Autonomous AI Pipeline</span>
+<span class="w-1.5 h-1.5 rounded-full bg-secondary-fixed"></span>
+<span class="font-code-sm text-code-sm text-primary">Conf: 94%</span>
+</div>
+</div>
+<!-- Primary RCA Content Canvas -->
+<div class="flex flex-col gap-space-xl" id="tabContentSummary">
+<!-- Main Card: Final RCA Summary -->
+<div class="bg-surface-container-lowest rounded-xl p-space-2xl shadow-sm flex flex-col gap-space-2xl">
+<!-- Section Header with Meta Tags -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-md">
+<div class="flex flex-col">
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Final RCA Summary</h2>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Automated synthesis approved by Incident Commander</span>
+</div>
+<div class="flex flex-wrap items-center gap-space-sm">
+<span class="px-space-md py-space-xs rounded-full bg-surface-container-low text-on-surface-variant font-label-md text-label-md flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[14px]">timer</span>
+            MTTD: 4m
+          </span>
+<span class="px-space-md py-space-xs rounded-full bg-surface-container-low text-on-surface-variant font-label-md text-label-md flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[14px]">hourglass_bottom</span>
+            MTTR: 22m
+          </span>
+<span class="px-space-md py-space-xs rounded-full bg-surface-container-high text-primary font-label-md text-label-md flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[14px]">verified</span>
+            High Confidence
+          </span>
+</div>
+</div>
+<!-- Root Cause Spotlight Callout -->
+<div class="p-space-xl rounded-xl bg-surface-container-low flex flex-col gap-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[20px] text-primary">psychology</span>
+<span class="font-headline-sm text-headline-sm text-on-surface uppercase tracking-wider">Primary Root Cause:</span>
+</div>
+<p class="font-body-lg text-body-lg text-on-surface leading-relaxed pl-space-xs">
+          Database connection pool capacity was reduced during deployment, contributing to database timeouts.
+        </p>
+</div>
+<!-- Two-Column Grid: Key Findings & Recommended Actions -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-xl">
+<!-- Left Column: Key Findings -->
+<div class="flex flex-col bg-surface-container-lowest rounded-xl p-space-xl bg-surface-bright shadow-sm">
+<div class="flex items-center justify-between pb-space-md">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[20px]">search_insights</span>
+<h3 class="font-headline-md text-headline-md text-on-surface">Key Findings</h3>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Observed Evidence</span>
+</div>
+<div class="flex flex-col gap-space-md pt-space-xs">
+<!-- Finding 1 -->
+<div class="flex items-start gap-space-md p-space-md rounded-lg bg-surface-container-low/70 hover:bg-surface-container-low transition-colors">
+<div class="w-6 h-6 rounded-full bg-secondary-fixed/60 flex items-center justify-center text-primary shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface">Deployment change detected (v1.8.3)</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Triggered at 10:12 AM UTC via GitLab CI Pipeline #48102</span>
+</div>
+</div>
+<!-- Finding 2 -->
+<div class="flex items-start gap-space-md p-space-md rounded-lg bg-surface-container-low/70 hover:bg-surface-container-low transition-colors">
+<div class="w-6 h-6 rounded-full bg-secondary-fixed/60 flex items-center justify-center text-primary shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface">Database latency increased (950 ms)</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Elevated from baseline 38ms; caused queue saturation</span>
+</div>
+</div>
+<!-- Finding 3 -->
+<div class="flex items-start gap-space-md p-space-md rounded-lg bg-surface-container-low/70 hover:bg-surface-container-low transition-colors">
+<div class="w-6 h-6 rounded-full bg-secondary-fixed/60 flex items-center justify-center text-primary shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface">Connection pool reduced (50 → 20)</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Configuration commit <code class="font-code-sm text-code-sm text-primary">#c8f90a</code> applied accidentally</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Recommended Actions -->
+<div class="flex flex-col bg-surface-container-lowest rounded-xl p-space-xl bg-surface-bright shadow-sm">
+<div class="flex items-center justify-between pb-space-md">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[20px]">checklist</span>
+<h3 class="font-headline-md text-headline-md text-on-surface">Recommended Actions</h3>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Mitigations</span>
+</div>
+<div class="flex flex-col gap-space-md pt-space-xs">
+<!-- Action 1 -->
+<div class="flex items-start justify-between p-space-md rounded-lg bg-surface-container-low/70 hover:bg-surface-container-low transition-colors group">
+<div class="flex items-start gap-space-md">
+<div class="w-6 h-6 rounded-full bg-secondary-fixed/60 flex items-center justify-center text-primary shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface">Review DB pool size</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Set minimum thresholds in Helm chart values for production</span>
+</div>
+</div>
+<span class="font-code-sm text-code-sm px-space-sm py-0.5 rounded bg-surface-container-high text-primary opacity-0 group-hover:opacity-100 transition-opacity">P0</span>
+</div>
+<!-- Action 2 -->
+<div class="flex items-start justify-between p-space-md rounded-lg bg-surface-container-low/70 hover:bg-surface-container-low transition-colors group">
+<div class="flex items-start gap-space-md">
+<div class="w-6 h-6 rounded-full bg-secondary-fixed/60 flex items-center justify-center text-primary shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface">Monitor latency</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Configure Prometheus alert for query wait times &gt; 250ms</span>
+</div>
+</div>
+<span class="font-code-sm text-code-sm px-space-sm py-0.5 rounded bg-surface-container-high text-primary opacity-0 group-hover:opacity-100 transition-opacity">P1</span>
+</div>
+<!-- Action 3 -->
+<div class="flex items-start justify-between p-space-md rounded-lg bg-surface-container-low/70 hover:bg-surface-container-low transition-colors group">
+<div class="flex items-start gap-space-md">
+<div class="w-6 h-6 rounded-full bg-secondary-fixed/60 flex items-center justify-center text-primary shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface">Run load test</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Simulate 120 req/s concurrency peak before next deploy</span>
+</div>
+</div>
+<span class="font-code-sm text-code-sm px-space-sm py-0.5 rounded bg-surface-container-high text-primary opacity-0 group-hover:opacity-100 transition-opacity">P2</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Telemetry Diagnostics Sparkline Row -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-lg pt-space-xs">
+<div class="p-space-lg rounded-xl bg-surface-container-low flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface-variant">API p95 Latency</span>
+<span class="font-code-sm text-code-sm text-error bg-error-container/40 px-space-xs py-0.5 rounded">+620%</span>
+</div>
+<div class="flex items-baseline gap-space-sm my-space-sm">
+<span class="font-headline-xl text-headline-xl text-on-surface">1,800 ms</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">vs 250ms SLA</span>
+</div>
+<svg class="w-full h-8 text-error" fill="none" viewbox="0 0 100 24">
+<path d="M0 20 L20 19 L40 18 L60 21 L75 3 L90 12 L100 6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<div class="p-space-lg rounded-xl bg-surface-container-low flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface-variant">DB Query Timeouts</span>
+<span class="font-code-sm text-code-sm text-error bg-error-container/40 px-space-xs py-0.5 rounded">42 errs</span>
+</div>
+<div class="flex items-baseline gap-space-sm my-space-sm">
+<span class="font-headline-xl text-headline-xl text-on-surface">8.5%</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">overall error rate</span>
+</div>
+<svg class="w-full h-8 text-primary" fill="none" viewbox="0 0 100 24">
+<path d="M0 22 L25 21 L50 20 L65 4 L80 8 L100 19" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<div class="p-space-lg rounded-xl bg-surface-container-low flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface-variant">DB Pool Saturation</span>
+<span class="font-code-sm text-code-sm text-on-surface-variant bg-surface-container-high px-space-xs py-0.5 rounded">100% cap</span>
+</div>
+<div class="flex items-baseline gap-space-sm my-space-sm">
+<span class="font-headline-xl text-headline-xl text-on-surface">20 / 20</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">conns locked</span>
+</div>
+<svg class="w-full h-8 text-tertiary" fill="none" viewbox="0 0 100 24">
+<path d="M0 20 L30 18 L55 5 L75 5 L85 5 L100 18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+</div>
+</div>
+<!-- Incident Meta Bar / Investigation Footer Details -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-md bg-surface-container-lowest p-space-lg rounded-xl shadow-sm">
+<div class="flex items-center gap-space-lg text-on-surface-variant font-body-sm text-body-sm">
+<span class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[16px] text-primary">account_circle</span>
+          Audited by: <strong>Ayswarya (On-Call SRE)</strong>
+</span>
+<span class="hidden md:inline">•</span>
+<span class="hidden md:flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[16px] text-secondary">cloud_done</span>
+          Environment: <strong>Production (US-East-1)</strong>
+</span>
+<span class="hidden lg:inline">•</span>
+<span class="hidden lg:flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[16px] text-tertiary">schedule</span>
+          Resolved: <strong>Oct 28, 2026 10:37 AM UTC</strong>
+</span>
+</div>
+<div class="flex items-center gap-space-sm">
+<button class="inline-flex items-center gap-space-xs px-space-md py-space-xs rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low font-headline-sm text-headline-sm transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">edit_note</span>
+          Add Note
+        </button>
+<button class="inline-flex items-center gap-space-xs px-space-md py-space-xs rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low font-headline-sm text-headline-sm transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">archive</span>
+          Archive Incident
+        </button>
+</div>
+</div>
+</div>
+<!-- Interactive script for Tabs and Dropdown -->
+<script>
+    (function() {
+      // Dropdown toggle
+      const btn = document.getElementById('downloadDropdownBtn');
+      const menu = document.getElementById('downloadMenu');
+      if (btn && menu) {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          menu.classList.toggle('hidden');
+        });
+        document.addEventListener('click', () => {
+          menu.classList.add('hidden');
+        });
+      }
+
+      // Tab switcher mockup
+      const tabs = document.querySelectorAll('.tab-btn');
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          tabs.forEach(t => {
+            t.classList.remove('text-primary');
+            t.classList.remove("after:content-['']");
+            t.classList.remove('after:absolute');
+            t.classList.remove('after:bottom-0');
+            t.classList.remove('after:left-0');
+            t.classList.remove('after:right-0');
+            t.classList.remove('after:h-0.5');
+            t.classList.remove('after:bg-primary');
+            t.classList.add('text-on-surface-variant');
+          });
+          tab.classList.add('text-primary');
+          tab.classList.remove('text-on-surface-variant');
+          tab.classList.add("after:content-['']", 'after:absolute', 'after:bottom-0', 'after:left-0', 'after:right-0', 'after:h-0.5', 'after:bg-primary');
+        });
+      });
+    })();
+  </script>
+</div></main></div></body></html>

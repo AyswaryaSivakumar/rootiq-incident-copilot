@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"surface-tint":"#0053db","inverse-primary":"#b4c5ff","on-secondary-container":"#5c647a","background":"#f8f9ff","tertiary-fixed-dim":"#c0c1ff","inverse-surface":"#213145","on-secondary":"#ffffff","surface-dim":"#cbdbf5","on-primary-container":"#eeefff","primary-fixed":"#dbe1ff","outline-variant":"#c3c6d7","secondary-container":"#dae2fd","surface-container-lowest":"#ffffff","surface-bright":"#f8f9ff","outline":"#737686","on-tertiary-container":"#f1eeff","primary":"#004ac6","surface-container-high":"#dce9ff","on-surface":"#0b1c30","on-primary":"#ffffff","surface-variant":"#d3e4fe","surface-container":"#e5eeff","on-error":"#ffffff","on-surface-variant":"#434655","primary-fixed-dim":"#b4c5ff","on-tertiary-fixed-variant":"#2f2ebe","on-tertiary":"#ffffff","secondary":"#565e74","on-tertiary-fixed":"#07006c","on-primary-fixed-variant":"#003ea8","inverse-on-surface":"#eaf1ff","on-error-container":"#93000a","on-secondary-fixed":"#131b2e","error-container":"#ffdad6","secondary-fixed":"#dae2fd","primary-container":"#2563eb","secondary-fixed-dim":"#bec6e0","on-background":"#0b1c30","error":"#ba1a1a","surface-container-highest":"#d3e4fe","surface-container-low":"#eff4ff","tertiary-container":"#585be6","on-primary-fixed":"#00174b","tertiary":"#3e3fcc","on-secondary-fixed-variant":"#3f465c","surface":"#f8f9ff","tertiary-fixed":"#e1e0ff"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"gutter-lg":"1.5rem","margin-sm":"1rem","space-xs":"0.25rem","space-xl":"1.5rem","space-md":"0.75rem","gutter":"1rem","space-lg":"1rem","margin":"1.5rem","space-sm":"0.5rem","space-2xl":"2rem"},"fontFamily":{"headline-xl":["Inter"],"body-sm":["Inter"],"headline-sm":["Inter"],"code-sm":["JetBrains Mono"],"body-md":["Inter"],"headline-md":["Inter"],"label-sm":["Inter"],"headline-lg":["Inter"],"label-md":["Inter"],"body-lg":["Inter"]},"fontSize":{"headline-xl":["28px",{"lineHeight":"36px","letterSpacing":"-0.02em","fontWeight":"700"}],"body-sm":["12px",{"lineHeight":"18px","fontWeight":"400"}],"headline-sm":["15px",{"lineHeight":"22px","letterSpacing":"-0.005em","fontWeight":"600"}],"code-sm":["12px",{"lineHeight":"16px","fontWeight":"500"}],"body-md":["13px",{"lineHeight":"20px","fontWeight":"400"}],"headline-md":["18px",{"lineHeight":"26px","letterSpacing":"-0.01em","fontWeight":"600"}],"label-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.04em","fontWeight":"600"}],"headline-lg":["22px",{"lineHeight":"30px","letterSpacing":"-0.015em","fontWeight":"600"}],"label-md":["12px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"600"}],"body-lg":["15px",{"lineHeight":"24px","fontWeight":"400"}]}}}}</script></head><body class="bg-background font-body-md text-on-surface antialiased min-h-screen"><aside class="fixed left-0 top-0 bottom-0 w-64 bg-on-background z-50 flex flex-col justify-between p-space-lg select-none shadow-[0_1px_8px_rgba(0,0,0,0.08)]"><div class="flex flex-col gap-space-2xl"><div class="flex items-center gap-space-md px-space-xs"><div class="w-9 h-9 rounded-lg bg-primary-container flex items-center justify-center text-on-primary shadow-sm"><span class="material-symbols-outlined text-[22px]">neurology</span></div><div class="flex flex-col"><span class="font-headline-md text-headline-md text-surface tracking-tight leading-none">RootIQ</span><span class="font-label-sm text-label-sm text-surface-dim uppercase tracking-wider mt-1">RCA Copilot</span></div></div><nav class="flex flex-col gap-space-xs" data-active-classes="bg-primary-container text-on-primary font-headline-sm shadow-sm"><a class="flex items-center gap-space-md px-space-md py-space-sm rounded-lg text-surface-dim font-headline-sm text-headline-sm hover:bg-surface-container-lowest/10 hover:text-surface transition-all" data-path="overview" href="#"><span class="material-symbols-outlined text-[20px]">grid_view</span>Overview</a><a aria-current="page" class="flex items-center gap-space-md px-space-md py-space-sm rounded-lg transition-all bg-primary-container text-on-primary font-headline-sm shadow-sm" data-path="investigations" href="#"><span class="material-symbols-outlined text-[20px]">troubleshoot</span>Investigations</a><a class="flex items-center gap-space-md px-space-md py-space-sm rounded-lg text-surface-dim font-headline-sm text-headline-sm hover:bg-surface-container-lowest/10 hover:text-surface transition-all" data-path="evidence" href="#"><span class="material-symbols-outlined text-[20px]">fact_check</span>Evidence</a><a class="flex items-center gap-space-md px-space-md py-space-sm rounded-lg text-surface-dim font-headline-sm text-headline-sm hover:bg-surface-container-lowest/10 hover:text-surface transition-all" data-path="settings" href="#"><span class="material-symbols-outlined text-[20px]">settings</span>Settings</a></nav></div><div class="pt-space-md"><div class="inline-flex items-center gap-space-sm px-space-md py-space-xs rounded-full bg-surface-container-lowest/10 backdrop-blur-sm"><span class="w-2 h-2 rounded-full bg-secondary-fixed"></span><span class="font-code-sm text-code-sm text-surface-dim">System Online v1.0.0</span></div></div></aside><div class="pl-64"><header class="fixed top-0 left-64 right-0 h-16 bg-surface-container-lowest/90 backdrop-blur-md shadow-[0_1px_8px_rgba(0,0,0,0.03)] z-40 flex items-center justify-between px-space-2xl"><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-xs px-space-sm py-space-xs rounded-lg bg-surface-container-low text-on-surface-variant font-label-md text-label-md"><span class="material-symbols-outlined text-[16px]">verified_user</span>Incident Command Active</div></div><div class="flex items-center gap-space-xl"><button aria-label="Notifications" class="relative p-space-xs rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors" type="button"><span class="material-symbols-outlined text-[22px]">notifications</span><span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-primary-container ring-2 ring-surface-container-lowest"></span></button><div class="flex items-center gap-space-md pl-space-xs"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="flex items-center gap-space-xs cursor-pointer select-none"><span class="font-headline-sm text-headline-sm text-on-surface">Ayswarya</span><span class="material-symbols-outlined text-on-surface-variant text-[18px]">keyboard_arrow_down</span></div></div></div></header><main class="relative pt-16 w-full min-h-screen bg-background px-space-2xl py-space-2xl"><div class="flex flex-col w-full">
+<!-- Interactive State Management Script -->
+<script>
+    function selectOption(id) {
+      document.querySelectorAll('.decision-radio-btn').forEach(btn => {
+        btn.classList.remove('bg-primary-container', 'text-on-primary', 'shadow-sm');
+        btn.classList.add('bg-surface-container-low', 'text-on-surface');
+      });
+      const activeBtn = document.getElementById(id);
+      if (activeBtn) {
+        activeBtn.classList.remove('bg-surface-container-low', 'text-on-surface');
+        activeBtn.classList.add('bg-primary-container', 'text-on-primary', 'shadow-sm');
+      }
+    }
+  </script>
+<!-- Breadcrumbs & Quick Incident Meta Navigation -->
+<div class="flex flex-wrap items-center justify-between gap-space-md mb-space-xl">
+<div class="flex items-center gap-space-sm text-on-surface-variant font-label-md text-label-md">
+<a class="hover:text-primary transition-colors flex items-center gap-space-xs" href="#">
+<span class="material-symbols-outlined text-[16px]">troubleshoot</span>
+        Investigations
+      </a>
+<span class="text-outline-variant">/</span>
+<span class="text-on-surface font-semibold font-code-sm text-code-sm px-space-sm py-0.5 rounded bg-surface-container">INC-001</span>
+<span class="text-outline-variant">/</span>
+<span class="text-primary font-semibold">Human Review</span>
+</div>
+<!-- Live Telemetry Status Pill -->
+<div class="inline-flex items-center gap-space-sm px-space-md py-space-xs rounded-full bg-surface-container-lowest shadow-sm">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-tertiary"></span>
+</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Awaiting Human Sign-off</span>
+</div>
+</div>
+<!-- Primary Review Banner -->
+<div class="relative overflow-hidden bg-surface-container-lowest rounded-xl shadow-sm p-space-xl mb-space-xl">
+<div class="absolute right-0 top-0 -mt-6 -mr-6 w-56 h-56 rounded-full bg-tertiary-fixed opacity-30 blur-2xl pointer-events-none"></div>
+<div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-space-lg">
+<div class="flex items-start md:items-center gap-space-lg">
+<div class="w-14 h-14 rounded-full bg-tertiary-fixed flex items-center justify-center text-tertiary shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-[30px]" style="font-variation-settings: 'FILL' 1;">shield_person</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-sm flex-wrap">
+<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">Human Review Required</h1>
+<span class="px-space-sm py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed-variant font-label-sm text-label-sm">Stage 4 / 4</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mt-0.5">Please review the automated investigation results, validate evidence linkages, and select your root cause determination.</p>
+</div>
+</div>
+<!-- Incident Quick Facts Pill Matrix -->
+<div class="flex items-center gap-space-md shrink-0 bg-surface-container-low px-space-lg py-space-sm rounded-lg self-start md:self-auto">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Confidence</span>
+<span class="font-headline-sm text-headline-sm text-on-surface font-semibold">82% Verified</span>
+</div>
+<div class="w-px h-8 bg-surface-container-highest"></div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Hypothesis</span>
+<span class="font-headline-sm text-headline-sm text-primary font-semibold">Rank #1 Primary</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Main Content: Two-Column Diagnostic & Decision Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-xl items-start">
+<!-- LEFT COLUMN: Diagnostic Context & Evidence Stack (7 Cols) -->
+<div class="lg:col-span-7 flex flex-col gap-space-xl">
+<!-- Card: Investigation Summary -->
+<div class="bg-surface-container-lowest rounded-xl p-space-xl shadow-sm flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-lg bg-surface-container-high flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[20px]">assignment_turned_in</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Investigation Summary</h2>
+</div>
+<span class="font-code-sm text-code-sm text-on-surface-variant bg-surface-container px-space-sm py-0.5 rounded">RCA Model v3.4</span>
+</div>
+<div class="bg-surface-container-low rounded-lg p-space-lg">
+<p class="font-body-lg text-body-lg text-on-surface leading-relaxed">
+            The top hypothesis is <span class="font-semibold text-primary">Database connection pool exhaustion</span>, supported by deployment changes and database latency increase.
+          </p>
+</div>
+<!-- Telemetry Breakdown Sub-panel -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-space-md pt-space-xs">
+<div class="bg-surface-container-lowest p-space-md rounded-lg flex flex-col gap-1 shadow-sm">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Service Target</span>
+<span class="font-code-sm text-code-sm text-on-surface font-semibold">payment-service</span>
+<span class="font-body-sm text-body-sm text-error font-medium flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[14px]">arrow_upward</span> p95: 1800ms
+            </span>
+</div>
+<div class="bg-surface-container-lowest p-space-md rounded-lg flex flex-col gap-1 shadow-sm">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Trigger Event</span>
+<span class="font-code-sm text-code-sm text-on-surface font-semibold">v1.8.3 Release</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Pool reduced (50 → 20)</span>
+</div>
+<div class="bg-surface-container-lowest p-space-md rounded-lg flex flex-col gap-1 shadow-sm">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Contradictions</span>
+<span class="font-code-sm text-code-sm text-secondary font-semibold">E008 Checked</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">0 Inconsistencies</span>
+</div>
+</div>
+</div>
+<!-- Card: Key Evidence (Soft Purple/Lavender Analytical Surface) -->
+<div class="bg-tertiary-fixed/30 rounded-xl p-space-xl shadow-sm flex flex-col gap-space-lg">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-lg bg-tertiary-fixed flex items-center justify-center text-on-tertiary-fixed-variant">
+<span class="material-symbols-outlined text-[20px]">fact_check</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Key Evidence</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Artifacts supporting the connection pool hypothesis</p>
+</div>
+</div>
+<span class="font-label-sm text-label-sm bg-tertiary-fixed text-on-tertiary-fixed-variant px-space-sm py-0.5 rounded-full font-semibold">
+            5 Signals Linked
+          </span>
+</div>
+<!-- Evidence Badges Strip -->
+<div class="flex flex-wrap items-center gap-space-sm">
+<div class="group relative flex items-center gap-space-xs px-space-md py-space-sm rounded-lg bg-surface-container-lowest text-tertiary font-code-sm text-code-sm shadow-sm hover:bg-tertiary hover:text-on-tertiary transition-all cursor-pointer">
+<span class="material-symbols-outlined text-[16px] text-primary group-hover:text-on-tertiary">rocket_launch</span>
+<span class="font-semibold">E004</span>
+<span class="text-on-surface-variant text-[11px] group-hover:text-on-tertiary/80 font-normal">Deploy</span>
+</div>
+<div class="group relative flex items-center gap-space-xs px-space-md py-space-sm rounded-lg bg-surface-container-lowest text-tertiary font-code-sm text-code-sm shadow-sm hover:bg-tertiary hover:text-on-tertiary transition-all cursor-pointer">
+<span class="material-symbols-outlined text-[16px] text-error group-hover:text-on-tertiary">database</span>
+<span class="font-semibold">E005</span>
+<span class="text-on-surface-variant text-[11px] group-hover:text-on-tertiary/80 font-normal">Timeouts</span>
+</div>
+<div class="group relative flex items-center gap-space-xs px-space-md py-space-sm rounded-lg bg-surface-container-lowest text-tertiary font-code-sm text-code-sm shadow-sm hover:bg-tertiary hover:text-on-tertiary transition-all cursor-pointer">
+<span class="material-symbols-outlined text-[16px] text-tertiary group-hover:text-on-tertiary">speed</span>
+<span class="font-semibold">E006</span>
+<span class="text-on-surface-variant text-[11px] group-hover:text-on-tertiary/80 font-normal">DB Latency</span>
+</div>
+<div class="group relative flex items-center gap-space-xs px-space-md py-space-sm rounded-lg bg-surface-container-lowest text-tertiary font-code-sm text-code-sm shadow-sm hover:bg-tertiary hover:text-on-tertiary transition-all cursor-pointer">
+<span class="material-symbols-outlined text-[16px] text-secondary group-hover:text-on-tertiary">hub</span>
+<span class="font-semibold">E007</span>
+<span class="text-on-surface-variant text-[11px] group-hover:text-on-tertiary/80 font-normal">Conn Queue</span>
+</div>
+<div class="group relative flex items-center gap-space-xs px-space-md py-space-sm rounded-lg bg-surface-container-lowest text-tertiary font-code-sm text-code-sm shadow-sm hover:bg-tertiary hover:text-on-tertiary transition-all cursor-pointer">
+<span class="material-symbols-outlined text-[16px] text-error group-hover:text-on-tertiary">trending_up</span>
+<span class="font-semibold">E009</span>
+<span class="text-on-surface-variant text-[11px] group-hover:text-on-tertiary/80 font-normal">HTTP 504</span>
+</div>
+</div>
+<!-- Inline Visual Causal Graph Segment -->
+<div class="bg-surface-container-lowest/80 rounded-lg p-space-md flex flex-col gap-space-sm">
+<div class="flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm">
+<span>Causal Pathway Telemetry Correlation</span>
+<span class="font-code-sm text-code-sm text-primary">r = 0.94 Strong</span>
+</div>
+<!-- Compact SVG Metric Sparkline -->
+<svg class="w-full h-12 overflow-visible" fill="none" preserveaspectratio="none" viewbox="0 0 600 48">
+<path class="text-primary-container" d="M0,38 L80,36 L160,39 L240,35 L320,12 L400,8 L480,14 L560,9 L600,10" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+<path class="text-primary-container" d="M0,38 L80,36 L160,39 L240,35 L320,12 L400,8 L480,14 L560,9 L600,10 L600,48 L0,48 Z" fill="currentColor" opacity="0.08"></path>
+<circle class="fill-primary stroke-surface-container-lowest" cx="320" cy="12" r="4" stroke-width="2"></circle>
+<text class="fill-on-surface font-code-sm text-[10px]" x="330" y="14">Deploy 10:12 AM</text>
+</svg>
+</div>
+<div class="flex items-center justify-between pt-space-xs">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Click any token to inspect telemetry raw payloads</span>
+<a class="inline-flex items-center gap-space-xs font-headline-sm text-headline-sm text-primary hover:text-surface-tint font-semibold transition-colors" href="#">
+            View all evidence
+            <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</a>
+</div>
+</div>
+<!-- Human Verification Protocol Box -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex items-center justify-between">
+<div class="flex items-center gap-space-md">
+<span class="material-symbols-outlined text-[24px] text-tertiary">verified</span>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface">Auto-Rollback Recommendation</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Recommended fix: Revert deployment or bump pool max size to 60.</span>
+</div>
+</div>
+<span class="px-space-md py-space-xs rounded-full bg-secondary-container text-on-secondary-fixed font-label-sm text-label-sm font-semibold uppercase">Pending Sign-off</span>
+</div>
+</div>
+<!-- RIGHT COLUMN: Decision Engine Panel (5 Cols) -->
+<div class="lg:col-span-5 flex flex-col gap-space-xl">
+<div class="bg-surface-container-lowest rounded-xl p-space-xl shadow-sm flex flex-col gap-space-xl sticky top-24">
+<!-- Header -->
+<div class="flex items-center justify-between pb-space-xs">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-lg bg-primary-container text-on-primary flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-[20px]">how_to_reg</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Your Decision</h2>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Mandatory</span>
+</div>
+<!-- Decision Radio Action Buttons -->
+<fieldset class="flex flex-col gap-space-md">
+<legend class="sr-only">RCA Verification Decision</legend>
+<!-- Option 1: Accept -->
+<label class="decision-card relative flex items-start gap-space-md p-space-md rounded-lg bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer group" onclick="selectOption('radio-accept')">
+<input checked="" class="peer sr-only" name="rca_decision" type="radio" value="accept"/>
+<div class="decision-radio-btn w-5 h-5 rounded-full mt-0.5 bg-primary-container text-on-primary flex items-center justify-center shrink-0 transition-colors" id="radio-accept">
+<span class="w-2 h-2 rounded-full bg-surface-container-lowest"></span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface group-hover:text-primary transition-colors">
+                Accept – This is the root cause
+              </span>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+                Generates the finalized RCA report and executes the mitigation sequence.
+              </span>
+</div>
+</label>
+<!-- Option 2: Reject -->
+<label class="decision-card relative flex items-start gap-space-md p-space-md rounded-lg bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer group" onclick="selectOption('radio-reject')">
+<input class="peer sr-only" name="rca_decision" type="radio" value="reject"/>
+<div class="decision-radio-btn w-5 h-5 rounded-full mt-0.5 bg-surface-container-low text-on-surface flex items-center justify-center shrink-0 transition-colors" id="radio-reject">
+<span class="w-2 h-2 rounded-full bg-surface-container-lowest opacity-0 group-hover:opacity-40"></span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface group-hover:text-primary transition-colors">
+                Reject – Needs more investigation
+              </span>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+                Reruns autonomous hypothesis generator on downstream trace nodes.
+              </span>
+</div>
+</label>
+<!-- Option 3: Request More Evidence -->
+<label class="decision-card relative flex items-start gap-space-md p-space-md rounded-lg bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer group" onclick="selectOption('radio-request')">
+<input class="peer sr-only" name="rca_decision" type="radio" value="request_more"/>
+<div class="decision-radio-btn w-5 h-5 rounded-full mt-0.5 bg-surface-container-low text-on-surface flex items-center justify-center shrink-0 transition-colors" id="radio-request">
+<span class="w-2 h-2 rounded-full bg-surface-container-lowest opacity-0 group-hover:opacity-40"></span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface group-hover:text-primary transition-colors">
+                Request More Evidence
+              </span>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+                Ingests historical metric logs and cloud infrastructure audits.
+              </span>
+</div>
+</label>
+</fieldset>
+<!-- Optional Comments Field -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<label class="font-headline-sm text-headline-sm text-on-surface" for="review-comments">
+              Comments (Optional)
+            </label>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Markdown supported</span>
+</div>
+<textarea class="w-full bg-surface-container-low rounded-lg p-space-md text-on-surface placeholder:text-outline font-body-md text-body-md focus:bg-surface-container-lowest focus:shadow-sm focus:outline-none transition-all resize-none" id="review-comments" placeholder="Add your comments..." rows="4"></textarea>
+</div>
+<!-- Action Footer Buttons -->
+<div class="flex items-center justify-between gap-space-md pt-space-xs">
+<button class="inline-flex items-center justify-center gap-space-xs px-space-lg py-space-sm rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-headline-sm text-headline-sm transition-all" type="button">
+<span class="material-symbols-outlined text-[18px]">arrow_back</span>
+            Back
+          </button>
+<button class="flex-1 inline-flex items-center justify-center gap-space-xs px-space-lg py-space-sm rounded-lg bg-primary-container hover:bg-primary text-on-primary font-headline-sm text-headline-sm shadow-sm transition-all" type="button">
+<span class="material-symbols-outlined text-[18px]">check</span>
+            Submit Decision
+          </button>
+</div>
+<!-- Audit Signature Note -->
+<div class="flex items-center gap-space-xs justify-center text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]">lock</span>
+<span>Decision will be recorded as Incident Commander audit trail</span>
+</div>
+</div>
+</div>
+</div>
+</div></main></div></body></html>
