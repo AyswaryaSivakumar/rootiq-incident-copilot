@@ -1,7 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { fetchIncidents } from '../services/incidentService';
+import { formatUtcDateTime } from './IncidentSelection';
 
 export default function EmptyState({ onSelectIncident, onStartInvestigation }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [incidents, setIncidents] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    let isMounted = true;
+    setLoading(true);
+    fetchIncidents().then(({ data }) => {
+      if (!isMounted) return;
+      if (data) setIncidents(data);
+      setLoading(false);
+    });
+    return () => { isMounted = false; };
+  }, []);
 
   return (
     <div className="flex flex-col w-full">
@@ -46,7 +61,7 @@ export default function EmptyState({ onSelectIncident, onStartInvestigation }) {
           </div>
 
           {/* Typography */}
-          <h2 className="font-headline-lg text-headline-lg text-on-surface tracking-tight mb-space-xs">
+          <h2 className="font-headline-lg text-headline-lg text-on-surface tracking-tight mb-space-xs font-semibold">
             No Investigations Yet
           </h2>
           <p className="font-body-md text-body-md text-secondary max-w-sm mb-space-xl">
@@ -56,7 +71,7 @@ export default function EmptyState({ onSelectIncident, onStartInvestigation }) {
           {/* Primary Action CTA */}
           <button
             onClick={() => setIsModalOpen(true)}
-            className="inline-flex items-center justify-center gap-space-sm px-space-xl py-space-sm rounded-lg bg-primary-container text-on-primary font-headline-sm text-headline-sm shadow-sm hover:opacity-95 active:scale-[0.98] transition-all cursor-pointer"
+            className="inline-flex items-center justify-center gap-space-sm px-space-xl py-space-sm rounded-lg bg-primary-container text-on-primary font-headline-sm text-headline-sm shadow-sm hover:opacity-95 active:scale-[0.98] transition-all cursor-pointer font-semibold"
             type="button"
           >
             <span className="material-symbols-outlined text-[18px]">add_circle</span>
@@ -81,17 +96,17 @@ export default function EmptyState({ onSelectIncident, onStartInvestigation }) {
           </div>
         </div>
 
-        {/* Quick Incident Picker Modal Simulation */}
+        {/* Real Incidents Picker Modal */}
         {isModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-on-background/40 backdrop-blur-xs p-4">
-            <div className="w-full max-w-md bg-surface-container-lowest rounded-xl shadow-xl p-space-lg flex flex-col gap-space-md border border-surface-container animate-in fade-in zoom-in-95 duration-150">
+            <div className="w-full max-w-md bg-surface-container-lowest rounded-xl shadow-xl p-space-lg flex flex-col gap-space-md border border-surface-container animate-in fade-in zoom-in-95 duration-150 max-h-[85vh] overflow-hidden">
               <div className="flex items-center justify-between pb-2 border-b border-surface-container-high">
                 <div className="flex items-center gap-space-xs">
                   <span className="material-symbols-outlined text-primary text-[20px]">troubleshoot</span>
-                  <span className="font-headline-sm text-headline-sm text-on-surface">Available Incidents</span>
+                  <span className="font-headline-sm text-headline-sm text-on-surface font-semibold">Available Incidents</span>
                 </div>
                 <button
-                  className="text-on-surface-variant hover:text-on-surface"
+                  className="text-on-surface-variant hover:text-on-surface cursor-pointer"
                   onClick={() => setIsModalOpen(false)}
                   type="button"
                 >
@@ -100,55 +115,51 @@ export default function EmptyState({ onSelectIncident, onStartInvestigation }) {
               </div>
 
               <p className="font-body-sm text-body-sm text-secondary">
-                Select an active incident telemetry stream to launch copilot root-cause extraction:
+                Select an active incident telemetry stream from Supabase to launch copilot root-cause extraction:
               </p>
 
-              <div className="flex flex-col gap-space-xs">
-                <div
-                  className="flex items-center justify-between p-space-sm rounded-lg bg-surface-container-low hover:bg-surface-container cursor-pointer transition-colors border border-surface-container-high/40"
-                  onClick={() => {
-                    setIsModalOpen(false);
-                    if (onStartInvestigation) onStartInvestigation('INC-001');
-                  }}
-                >
-                  <div className="flex flex-col">
-                    <span className="font-headline-sm text-headline-sm text-on-surface">
-                      INC-001 - Payment service latency
-                    </span>
-                    <span className="font-code-sm text-code-sm text-error font-medium">
-                      High Severity • Oct 28, 10:15 AM (UTC)
-                    </span>
+              <div className="flex flex-col gap-space-xs overflow-y-auto max-h-60 pr-1">
+                {loading ? (
+                  <div className="p-4 text-center text-xs text-on-surface-variant">
+                    <span className="inline-block w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin mr-2"></span>
+                    Loading incidents from database...
                   </div>
-                  <span className="material-symbols-outlined text-primary text-[18px]">arrow_forward</span>
-                </div>
-
-                <div
-                  className="flex items-center justify-between p-space-sm rounded-lg bg-surface-container-low hover:bg-surface-container cursor-pointer transition-colors border border-surface-container-high/40"
-                  onClick={() => {
-                    setIsModalOpen(false);
-                    if (onSelectIncident) onSelectIncident();
-                  }}
-                >
-                  <div className="flex flex-col">
-                    <span className="font-headline-sm text-headline-sm text-on-surface">
-                      INC-002 - Auth token validation spike
-                    </span>
-                    <span className="font-code-sm text-code-sm text-secondary">
-                      Medium Severity • Oct 28, 08:30 AM (UTC)
-                    </span>
+                ) : incidents.length === 0 ? (
+                  <div className="p-4 text-center text-xs text-on-surface-variant italic">
+                    No incidents currently registered in database.
                   </div>
-                  <span className="material-symbols-outlined text-primary text-[18px]">arrow_forward</span>
-                </div>
+                ) : (
+                  incidents.map((inc) => (
+                    <div
+                      key={inc.incident_id}
+                      className="flex items-center justify-between p-space-sm rounded-lg bg-surface-container-low hover:bg-surface-container cursor-pointer transition-colors border border-surface-container-high/40"
+                      onClick={() => {
+                        setIsModalOpen(false);
+                        if (onStartInvestigation) onStartInvestigation(inc);
+                      }}
+                    >
+                      <div className="flex flex-col min-w-0 pr-2">
+                        <span className="font-headline-sm text-headline-sm text-on-surface truncate font-semibold">
+                          {inc.title}
+                        </span>
+                        <span className="font-code-sm text-code-sm text-error font-medium truncate">
+                          {inc.severity} Severity • {formatUtcDateTime(inc.start_time)}
+                        </span>
+                      </div>
+                      <span className="material-symbols-outlined text-primary text-[18px] shrink-0">arrow_forward</span>
+                    </div>
+                  ))
+                )}
               </div>
 
-              <div className="flex justify-between items-center pt-space-xs">
+              <div className="flex justify-between items-center pt-space-xs border-t border-surface-container-high/40">
                 <button
                   type="button"
                   onClick={() => {
                     setIsModalOpen(false);
                     if (onSelectIncident) onSelectIncident();
                   }}
-                  className="text-primary hover:underline font-label-md text-label-md"
+                  className="text-primary hover:underline font-label-md text-label-md cursor-pointer font-medium"
                 >
                   Go to Incident Selection page →
                 </button>

@@ -1,6 +1,15 @@
 import React, { useState } from 'react';
+import DemoValue from '../components/DemoValue';
+import { DEMO_ERROR_LOGS } from '../demo/demoData';
 
-export default function ErrorState({ onRetry, onBackToSelection }) {
+export default function ErrorState({
+  error = null,
+  incidentId = '—',
+  service = '—',
+  onRetry,
+  onProceedWithDemo,
+  onBackToSelection
+}) {
   const [showDiagnostics, setShowDiagnostics] = useState(false);
   const [isRetrying, setIsRetrying] = useState(false);
 
@@ -9,8 +18,14 @@ export default function ErrorState({ onRetry, onBackToSelection }) {
     setTimeout(() => {
       setIsRetrying(false);
       if (onRetry) onRetry();
-    }, 1800);
+    }, 600);
   };
+
+  const hasRealError = Boolean(error);
+  const errorMessage = error?.message || (typeof error === 'string' ? error : null);
+  const errorHint = error?.hint || null;
+  const errorStatus = error?.status || error?.code || null;
+  const rawBody = error?.rawBody || null;
 
   return (
     <div className="flex flex-col w-full">
@@ -30,11 +45,15 @@ export default function ErrorState({ onRetry, onBackToSelection }) {
           </div>
 
           {/* Heading & Explanatory Subtitle */}
-          <h1 className="font-headline-xl text-headline-xl text-on-surface mb-space-sm tracking-tight">
+          <h1 className="font-headline-xl text-headline-xl text-on-surface mb-space-sm tracking-tight font-semibold">
             Investigation Failed
           </h1>
           <p className="font-body-md text-body-md text-on-surface-variant max-w-sm mb-space-2xl">
-            We couldn't complete the investigation due to a timeout.
+            {hasRealError ? (
+              <span className="text-error font-medium">{errorMessage}</span>
+            ) : (
+              <DemoValue real={null} demo="We couldn't complete the investigation due to a timeout." />
+            )}
           </p>
 
           {/* Action Buttons */}
@@ -42,7 +61,7 @@ export default function ErrorState({ onRetry, onBackToSelection }) {
             <button
               onClick={handleRetry}
               disabled={isRetrying}
-              className="inline-flex items-center justify-center gap-space-xs px-space-xl py-space-sm rounded-lg bg-primary-container text-on-primary font-headline-sm text-headline-sm shadow-sm hover:bg-primary transition-all duration-150 active:scale-[0.98] cursor-pointer disabled:opacity-80"
+              className="inline-flex items-center justify-center gap-space-xs px-space-xl py-space-sm rounded-lg bg-primary-container text-on-primary font-headline-sm text-headline-sm shadow-sm hover:bg-primary transition-all duration-150 active:scale-[0.98] cursor-pointer disabled:opacity-80 font-semibold"
               type="button"
             >
               <span className={`material-symbols-outlined text-[18px] ${isRetrying ? 'animate-spin' : ''}`}>
@@ -53,24 +72,44 @@ export default function ErrorState({ onRetry, onBackToSelection }) {
 
             <button
               onClick={() => setShowDiagnostics(!showDiagnostics)}
-              className="inline-flex items-center justify-center gap-space-xs px-space-xl py-space-sm rounded-lg bg-surface-container-low text-on-surface font-headline-sm text-headline-sm hover:bg-surface-container transition-all duration-150 active:scale-[0.98] cursor-pointer border border-surface-container"
+              className="inline-flex items-center justify-center gap-space-xs px-space-xl py-space-sm rounded-lg bg-surface-container-low text-on-surface font-headline-sm text-headline-sm hover:bg-surface-container transition-all duration-150 active:scale-[0.98] cursor-pointer border border-surface-container font-medium"
               type="button"
             >
               <span className="material-symbols-outlined text-[18px] text-on-surface-variant">terminal</span>
               <span>{showDiagnostics ? 'Hide Details' : 'View Details'}</span>
             </button>
+
+            {onProceedWithDemo && (
+              <button
+                onClick={onProceedWithDemo}
+                className="inline-flex items-center justify-center gap-space-xs px-space-xl py-space-sm rounded-lg bg-surface-container-lowest text-primary font-headline-sm text-headline-sm hover:bg-surface-container-low transition-all duration-150 active:scale-[0.98] cursor-pointer border border-primary/30 font-semibold"
+                type="button"
+              >
+                <span className="material-symbols-outlined text-[18px]">visibility</span>
+                <span>Preview with Demo Results</span>
+              </button>
+            )}
           </div>
 
-          {/* Possible Reasons Card */}
+          {/* Possible Reasons / Diagnostic Hint Card */}
           <div className="w-full bg-error-container/60 rounded-xl p-space-lg text-left transition-all border border-error-container">
             <div className="flex items-center gap-space-xs mb-space-sm">
               <span className="material-symbols-outlined text-error text-[16px]">info</span>
-              <span className="font-headline-sm text-headline-sm text-error">Possible reasons:</span>
+              <span className="font-headline-sm text-headline-sm text-error font-semibold">
+                {errorHint ? 'Recommended Action:' : 'Possible reasons:'}
+              </span>
             </div>
-            <ul className="flex flex-col gap-space-xs pl-space-lg font-body-md text-body-md text-on-error-container list-disc marker:text-error">
-              <li className="pl-space-xs">Temporary API issue</li>
-              <li className="pl-space-xs">Large data volume</li>
-            </ul>
+            {errorHint ? (
+              <p className="font-body-md text-body-md text-on-error-container font-medium leading-relaxed">
+                {errorHint}
+              </p>
+            ) : (
+              <ul className="flex flex-col gap-space-xs pl-space-lg font-body-md text-body-md text-on-error-container list-disc marker:text-error">
+                <li className="pl-space-xs">Database network connectivity or authentication timeout</li>
+                <li className="pl-space-xs">Supabase Row-Level Security (RLS) restrictions</li>
+                <li className="pl-space-xs">Temporary API latency breach</li>
+              </ul>
+            )}
           </div>
 
           {/* Collapsible Detailed Diagnostics Panel */}
@@ -81,20 +120,30 @@ export default function ErrorState({ onRetry, onBackToSelection }) {
                   Incident Diagnostics
                 </span>
                 <span className="inline-flex items-center px-space-xs py-0.5 rounded bg-error/10 text-error font-code-sm text-code-sm font-semibold">
-                  Status: 504 Gateway Timeout
+                  Status: {errorStatus || 'Execution Failed'}
                 </span>
               </div>
               <div className="bg-inverse-surface rounded-lg p-space-md text-surface font-code-sm text-code-sm overflow-x-auto leading-relaxed">
-                <p className="text-surface-dim">$ rca-engine query --incident INC-001</p>
-                <p className="text-error-container mt-1">
-                  [FATAL] Query timeout after 60000ms while polling OpenTelemetry traces
-                </p>
-                <p className="text-surface-variant mt-1">
-                  [TRACE] collector.service-mesh.internal → 4,289,102 spans fetched before buffer saturated
-                </p>
-                <p className="text-surface-dim mt-1">
-                  [SYSTEM] Cluster payment-service ingress reported gateway timeout waiting on socket
-                </p>
+                <p className="text-surface-dim">$ rca-engine query --incident {incidentId}</p>
+                {hasRealError ? (
+                  <>
+                    <p className="text-error-container mt-1">[ERROR] {errorMessage}</p>
+                    {errorStatus && <p className="text-surface-variant mt-1">[HTTP STATUS] {errorStatus}</p>}
+                    {errorHint && <p className="text-surface-dim mt-1">[HINT] {errorHint}</p>}
+                    {rawBody && (
+                      <div className="mt-2 pt-2 border-t border-surface-variant/30">
+                        <span className="text-secondary text-[11px] block mb-1">[RAW RESPONSE]:</span>
+                        <pre className="text-xs text-surface whitespace-pre-wrap">{rawBody}</pre>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  DEMO_ERROR_LOGS.map((logLine, idx) => (
+                    <p key={idx} className={`mt-1 ${idx === 0 ? 'text-error-container' : idx === 1 ? 'text-surface-variant' : 'text-surface-dim'}`}>
+                      <DemoValue real={null} demo={logLine} />
+                    </p>
+                  ))
+                )}
               </div>
             </div>
           )}
@@ -104,14 +153,22 @@ export default function ErrorState({ onRetry, onBackToSelection }) {
         <div className="mt-space-lg flex items-center gap-space-lg text-on-surface-variant font-label-md text-label-md flex-wrap justify-center">
           <span className="inline-flex items-center gap-space-xs">
             <span className="w-1.5 h-1.5 rounded-full bg-error"></span>
-            Target: payment-service
+            Target: <strong className="text-on-surface">{service}</strong>
           </span>
           <span className="text-outline-variant">•</span>
-          <span className="inline-flex items-center gap-space-xs font-code-sm text-code-sm">
-            INC-001
+          <span className="inline-flex items-center gap-space-xs font-code-sm text-code-sm font-bold text-on-surface">
+            {incidentId}
           </span>
           <span className="text-outline-variant">•</span>
-          <span className="text-on-surface-variant font-body-sm text-body-sm">Last attempt: Just now</span>
+          <span className="text-on-surface-variant font-body-sm text-body-sm">
+            <button
+              onClick={onBackToSelection}
+              className="text-primary hover:underline cursor-pointer font-medium"
+              type="button"
+            >
+              Back to Incident Selection
+            </button>
+          </span>
         </div>
       </div>
     </div>

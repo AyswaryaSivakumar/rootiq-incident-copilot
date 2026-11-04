@@ -1,206 +1,135 @@
 /**
- * Correlated Evidence Data for INC-001 (Payment service latency)
+ * Evidence Service for RootIQ
+ * Queries real canonical_evidence and raw_telemetry tables from Supabase.
+ * No mock data. Returns { data, error } for every call.
  */
 
-export const EVIDENCE_ITEMS = [
-  {
-    id: "E001",
-    category: "Metric",
-    title: "Payment API p95 Latency 1800 ms (↑620%)",
-    shortTitle: "Payment API p95 Latency",
-    value: "1800 ms",
-    badgeValue: "↑620%",
-    subtitle: "Correlated with database client socket timeout",
-    timestamp: "Oct 28, 10:20 AM (UTC)",
-    displayTime: "Oct 28, 10:20 AM",
-    service: "payment-service",
-    source: "synthetic_metrics",
-    reliability: "Synthetic",
-    isPrimarySymptom: true,
-    associatedHypothesis: "Supports Hypothesis 1: Database connection pool exhaustion. Degradation began 4 minutes following v1.8.3 rollout.",
-    matchedRank: "Rank #1 Match",
-    copilotInsight: "Latency elevated abruptly from 240ms to 1800ms within 90 seconds. Thread contention profile correlates 99.4% with simultaneous deployment of commit #9c0f4d1.",
-    chartData: [
-      { time: "10:00", value: 240 },
-      { time: "10:05", value: 250 },
-      { time: "10:10", value: 270 },
-      { time: "10:12", value: 310, isDeploy: true },
-      { time: "10:15", value: 780 },
-      { time: "10:18", value: 1420 },
-      { time: "10:20", value: 1800, isPeak: true },
-      { time: "10:25", value: 1650 },
-      { time: "10:30", value: 1350 }
-    ]
-  },
-  {
-    id: "E002",
-    category: "Metric",
-    title: "Payment Error Rate 8.5% (↑17x)",
-    shortTitle: "Payment Error Rate",
-    value: "8.5%",
-    badgeValue: "↑17x",
-    subtitle: "HTTP 504 Gateway Timeouts from upstream router",
-    timestamp: "Oct 28, 10:20 AM (UTC)",
-    displayTime: "Oct 28, 10:20 AM",
-    service: "payment-service",
-    source: "synthetic_metrics",
-    reliability: "Synthetic",
-    isPrimarySymptom: false,
-    associatedHypothesis: "Supports Hypothesis 2: Downstream service latency and Hypothesis 1: DB pool exhaustion.",
-    matchedRank: "Rank #2 Match",
-    copilotInsight: "504 Gateway Timeouts began surging at 10:16 AM, exactly when client connection wait queues surpassed 5,000ms timeout threshold."
-  },
-  {
-    id: "E003",
-    category: "Metric",
-    title: "Request Rate 120 req/s",
-    shortTitle: "Request Rate",
-    value: "120 req/s",
-    badgeValue: "Steady",
-    subtitle: "Within steady-state baseline boundary (±4%)",
-    timestamp: "Oct 28, 10:20 AM (UTC)",
-    displayTime: "Oct 28, 10:20 AM",
-    service: "payment-service",
-    source: "synthetic_metrics",
-    reliability: "Synthetic",
-    isPrimarySymptom: false,
-    associatedHypothesis: "Contradicts Hypothesis 3: Traffic surge. Incoming throughput remained flat at ~120 req/s.",
-    matchedRank: "Contradiction",
-    copilotInsight: "Traffic volume remained nominal with no abnormal DDoS, flash sale, or bot amplification detected in WAF edge logs."
-  },
-  {
-    id: "E004",
-    category: "Deployment",
-    title: "Version v1.8.3 deployed",
-    shortTitle: "Deployment v1.8.3",
-    value: "v1.8.3",
-    badgeValue: "Release",
-    subtitle: "Rollout git commit #9c0f4d1 by Release Bot",
-    timestamp: "Oct 28, 10:12 AM (UTC)",
-    displayTime: "Oct 28, 10:12 AM",
-    service: "payment-service",
-    source: "gitlab_ci",
-    reliability: "Production Audit",
-    isPrimarySymptom: false,
-    associatedHypothesis: "Key causal trigger. Deployment lowered HikariCP maximumPoolSize from 50 to 20 in application.yml.",
-    matchedRank: "Root Trigger",
-    copilotInsight: "Commit #9c0f4d1 altered database pool parameters inadvertently in staging config sync, triggering connection starvation under normal load."
-  },
-  {
-    id: "E005",
-    category: "Log",
-    title: "42 DB query timeouts",
-    shortTitle: "DB Query Timeouts",
-    value: "42 errors",
-    badgeValue: "Fatal",
-    subtitle: "org.postgresql.util.PSQLException: Connection pool exhausted",
-    timestamp: "Oct 28, 10:18 AM (UTC)",
-    displayTime: "Oct 28, 10:18 AM",
-    service: "payment-service",
-    source: "opentelemetry_logs",
-    reliability: "Synthetic",
-    isPrimarySymptom: false,
-    associatedHypothesis: "Strongly supports Hypothesis 1: Database connection pool exhaustion.",
-    matchedRank: "Rank #1 Match",
-    copilotInsight: "42 thread timeouts logged within a 3-minute window with message 'Timeout: 30000ms waiting for available connection'."
-  },
-  {
-    id: "E006",
-    category: "Dependency",
-    title: "DB Latency 950 ms",
-    shortTitle: "Database Latency",
-    value: "950 ms",
-    badgeValue: "Elevated",
-    subtitle: "PostgreSQL primary write replica queue saturation",
-    timestamp: "Oct 28, 10:20 AM (UTC)",
-    displayTime: "Oct 28, 10:20 AM",
-    service: "rds-postgres-cluster",
-    source: "rds_enhanced_monitoring",
-    reliability: "Synthetic",
-    isPrimarySymptom: false,
-    associatedHypothesis: "Supports Hypothesis 1: Connection pool bottleneck leading to replica lock queues.",
-    matchedRank: "Rank #1 Match",
-    copilotInsight: "PostgreSQL wait event pg_stat_activity indicates active queries blocked awaiting transaction locks from queued workers."
-  },
-  {
-    id: "E007",
-    category: "Log",
-    title: "Connection Queue Overflow (142 queued)",
-    shortTitle: "HikariCP Queue Depth",
-    value: "142 threads",
-    badgeValue: "Warning",
-    subtitle: "HikariPool-1 - Connection is not available, request timed out",
-    timestamp: "Oct 28, 10:19 AM (UTC)",
-    displayTime: "Oct 28, 10:19 AM",
-    service: "payment-service",
-    source: "spring_actuator",
-    reliability: "Synthetic",
-    isPrimarySymptom: false,
-    associatedHypothesis: "Supports Hypothesis 1: Connection Pool Exhaustion.",
-    matchedRank: "Rank #1 Match",
-    copilotInsight: "Active connection count reached 20/20 ceiling at 10:14 AM and remained pegged throughout incident duration."
-  },
-  {
-    id: "E008",
-    category: "Trace",
-    title: "Fraud-check downstream latency 42 ms",
-    shortTitle: "Fraud Check Service Trace",
-    value: "42 ms (Normal)",
-    badgeValue: "Healthy",
-    subtitle: "Internal span duration within healthy p50 tolerance",
-    timestamp: "Oct 28, 10:21 AM (UTC)",
-    displayTime: "Oct 28, 10:21 AM",
-    service: "fraud-check",
-    source: "jaeger_tracing",
-    reliability: "Synthetic",
-    isPrimarySymptom: false,
-    associatedHypothesis: "Contradicts Hypothesis 2: Downstream service delay. Fraud-check responded in 42ms.",
-    matchedRank: "Contradiction",
-    copilotInsight: "Downstream microservices did not demonstrate elevated latency; 98% of overall request duration was spent waiting inside payment-service."
-  },
-  {
-    id: "E009",
-    category: "Log",
-    title: "HTTP 504 NGINX Ingress Edge Logs",
-    shortTitle: "Ingress Edge 504s",
-    value: "214 spikes",
-    badgeValue: "Critical",
-    subtitle: "Upstream prematurely closed connection while reading response header",
-    timestamp: "Oct 28, 10:22 AM (UTC)",
-    displayTime: "Oct 28, 10:22 AM",
-    service: "ingress-nginx",
-    source: "fluentbit_k8s",
-    reliability: "Synthetic",
-    isPrimarySymptom: false,
-    associatedHypothesis: "Supports symptoms of customer-facing failures.",
-    matchedRank: "Symptom",
-    copilotInsight: "Edge proxies timed out after 30s as payments backend was completely blocked on database connection acquisition."
-  },
-  {
-    id: "E010",
-    category: "Trace",
-    title: "Distributed Trace Span: /v2/charge (1842ms)",
-    shortTitle: "Charge Endpoint Trace",
-    value: "1842 ms",
-    badgeValue: "Trace Root",
-    subtitle: "HikariCP getConnection() consumed 1610ms (87.4% of total time)",
-    timestamp: "Oct 28, 10:20 AM (UTC)",
-    displayTime: "Oct 28, 10:20 AM",
-    service: "payment-service",
-    source: "opentelemetry_traces",
-    reliability: "Synthetic",
-    isPrimarySymptom: false,
-    associatedHypothesis: "Definitive proof for Hypothesis 1. 1,610ms spent in connection pool wait.",
-    matchedRank: "Rank #1 Match",
-    copilotInsight: "Span flame-graph confirms business logic executed in under 20ms once the database connection was finally acquired."
+import { getSupabase } from './supabaseClient';
+
+/**
+ * Fetch all canonical_evidence rows for an incident, ordered by event_timestamp.
+ */
+export async function fetchEvidenceForIncident(incidentId) {
+  if (!incidentId) {
+    return { data: [], error: null };
   }
-];
 
-export const getEvidenceByCategory = (category = "All") => {
-  if (!category || category === "All") return EVIDENCE_ITEMS;
-  return EVIDENCE_ITEMS.filter(e => e.category.toLowerCase() === category.toLowerCase());
-};
+  try {
+    const supabase = getSupabase();
+    const { data, error } = await supabase
+      .from('canonical_evidence')
+      .select('evidence_id, incident_id, source_record_id, source_type, service, event_timestamp, observation, quality_status, limitations, created_at')
+      .eq('incident_id', incidentId)
+      .order('event_timestamp', { ascending: true, nullsFirst: false });
 
-export const getEvidenceById = (id = "E001") => {
-  return EVIDENCE_ITEMS.find(e => e.id === id) || EVIDENCE_ITEMS[0];
-};
+    if (error) {
+      console.error(`[RootIQ] Error fetching canonical_evidence for ${incidentId}:`, error);
+      return { data: null, error };
+    }
+
+    // Runtime discovery log
+    if (data && data.length > 0) {
+      console.log('[RootIQ Discovery] Sample canonical_evidence row:', data[0]);
+      const uniqueTypes = Array.from(new Set(data.map(d => d.source_type)));
+      console.log('[RootIQ Discovery] canonical_evidence distinct source_types:', uniqueTypes);
+      console.log('[RootIQ Discovery] canonical_evidence observation keys:', data[0].observation ? Object.keys(data[0].observation) : []);
+      console.log('[RootIQ Discovery] canonical_evidence limitations:', data[0].limitations);
+    } else {
+      console.log(`[RootIQ Discovery] No canonical_evidence rows found for incident ${incidentId}`);
+    }
+
+    return { data: data || [], error: null };
+  } catch (err) {
+    console.error(`[RootIQ] Exception in fetchEvidenceForIncident(${incidentId}):`, err);
+    return { data: null, error: err };
+  }
+}
+
+/**
+ * Fetch summary counts for an incident (total count and count grouped per real source_type).
+ * Computes dynamically from real rows; never hardcodes category names.
+ */
+export async function fetchEvidenceSummary(incidentId) {
+  if (!incidentId) {
+    return { data: { total: 0, bySourceType: {} }, error: null };
+  }
+
+  const { data: rows, error } = await fetchEvidenceForIncident(incidentId);
+  if (error) {
+    return { data: null, error };
+  }
+
+  const bySourceType = {};
+  (rows || []).forEach(row => {
+    const st = row.source_type || 'Unknown';
+    bySourceType[st] = (bySourceType[st] || 0) + 1;
+  });
+
+  return {
+    data: {
+      total: (rows || []).length,
+      bySourceType
+    },
+    error: null
+  };
+}
+
+/**
+ * Fetch raw telemetry payload rows for a specific source_record_id in an incident.
+ */
+export async function fetchRawTelemetryBySourceRecord(incidentId, sourceRecordId) {
+  if (!incidentId || !sourceRecordId) {
+    return { data: [], error: null };
+  }
+
+  try {
+    const supabase = getSupabase();
+    const { data, error } = await supabase
+      .from('raw_telemetry')
+      .select('id, incident_id, source_record_id, source_type, service, event_timestamp, raw_payload, ingested_at')
+      .eq('incident_id', incidentId)
+      .eq('source_record_id', sourceRecordId);
+
+    if (error) {
+      console.error(`[RootIQ] Error fetching raw_telemetry for ${sourceRecordId}:`, error);
+      return { data: null, error };
+    }
+
+    if (data && data.length > 0) {
+      console.log('[RootIQ Discovery] Sample raw_telemetry row:', data[0]);
+      console.log('[RootIQ Discovery] raw_telemetry payload keys:', data[0].raw_payload ? Object.keys(data[0].raw_payload) : []);
+    }
+
+    return { data: data || [], error: null };
+  } catch (err) {
+    console.error(`[RootIQ] Exception in fetchRawTelemetryBySourceRecord:`, err);
+    return { data: null, error: err };
+  }
+}
+
+/**
+ * Fetch raw telemetry rows for the entire incident to compute summary counts.
+ */
+export async function fetchRawTelemetryForIncident(incidentId) {
+  if (!incidentId) {
+    return { data: [], error: null };
+  }
+
+  try {
+    const supabase = getSupabase();
+    const { data, error } = await supabase
+      .from('raw_telemetry')
+      .select('id, incident_id, source_record_id, source_type, service, event_timestamp, ingested_at')
+      .eq('incident_id', incidentId);
+
+    if (error) {
+      console.error(`[RootIQ] Error fetching all raw_telemetry for ${incidentId}:`, error);
+      return { data: null, error };
+    }
+
+    return { data: data || [], error: null };
+  } catch (err) {
+    console.error(`[RootIQ] Exception in fetchRawTelemetryForIncident(${incidentId}):`, err);
+    return { data: null, error: err };
+  }
+}

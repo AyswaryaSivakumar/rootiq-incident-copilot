@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { PROGRESS_STAGES } from '../services/investigationService';
+import { DEMO_PROGRESS_STAGES } from '../demo/demoData';
+import DemoValue from '../components/DemoValue';
 
 export default function InvestigationProgress({
+  incident,
+  incidentId = '—',
+  investigationState,
   onComplete,
-  onAbort,
-  incidentId = "INC-001"
+  onAbort
 }) {
-  const [seconds, setSeconds] = useState(789); // ~ 13:09 like in screen_9d0b6e79.png
-  const [activeStageIndex, setActiveStageIndex] = useState(2); // Running AI Analysis
+  const [seconds, setSeconds] = useState(0);
+
+  const isSuccess = investigationState?.status === 'success';
 
   // Real-time elapsed timer
   useEffect(() => {
@@ -17,8 +21,20 @@ export default function InvestigationProgress({
     return () => clearInterval(timer);
   }, []);
 
+  // When status becomes success: auto navigate to results after ~800ms
+  useEffect(() => {
+    if (isSuccess) {
+      const timer = setTimeout(() => {
+        onComplete();
+      }, 800);
+      return () => clearTimeout(timer);
+    }
+  }, [isSuccess, onComplete]);
+
   const mins = String(Math.floor(seconds / 60)).padStart(2, '0');
   const secs = String(seconds % 60).padStart(2, '0');
+
+  const displayIncidentId = incident?.incident_id || incidentId || '—';
 
   return (
     <div className="flex flex-col w-full">
@@ -30,29 +46,31 @@ export default function InvestigationProgress({
 
           {/* Title and Subtitle */}
           <div className="flex flex-col gap-space-xs z-10">
-            <h1 className="font-headline-xl text-headline-xl text-on-surface tracking-tight">
-              Investigating Incident: <span className="text-primary-container">{incidentId}</span>
+            <h1 className="font-headline-xl text-headline-xl text-on-surface tracking-tight font-bold">
+              Investigating Incident: <span className="text-primary-container">{displayIncidentId}</span>
             </h1>
             <p className="font-body-lg text-body-lg text-on-surface-variant">
-              Analyzing evidence, generating hypotheses and validating results...
+              {isSuccess
+                ? 'Investigation workflow complete. Preparing RCA dossier...'
+                : 'Orchestrating n8n causal graph evaluation and validating telemetry signals...'}
             </p>
           </div>
 
-          {/* 5-Stage Stepper */}
+          {/* 5-Stage Stepper: First stage in-progress while running, others pending; all complete on success */}
           <div className="relative w-full py-space-xl px-space-md z-10 overflow-x-auto">
             <div className="flex items-start justify-between relative min-w-[680px]">
-              {PROGRESS_STAGES.map((stage, idx) => {
-                const isCompleted = idx < activeStageIndex;
-                const isCurrent = idx === activeStageIndex;
-                const isPending = idx > activeStageIndex;
+              {DEMO_PROGRESS_STAGES.map((stage, idx) => {
+                const isCompleted = isSuccess;
+                const isCurrent = !isSuccess && idx === 0;
+                const isPending = !isSuccess && idx > 0;
 
                 return (
                   <React.Fragment key={stage.id}>
                     {/* Stage Item */}
-                    <div className={`flex flex-col items-center flex-1 group ${isPending ? 'opacity-60' : ''}`}>
+                    <div className={`flex flex-col items-center flex-1 group ${isPending ? 'opacity-50' : ''}`}>
                       {isCompleted ? (
                         <div
-                          className="w-12 h-12 rounded-full shadow-sm flex items-center justify-center text-on-secondary mb-space-sm ring-4 ring-surface-container transition-transform group-hover:scale-105"
+                          className="w-12 h-12 rounded-full shadow-sm flex items-center justify-center text-white mb-space-sm ring-4 ring-emerald-100 transition-transform group-hover:scale-105"
                           style={{ backgroundColor: '#10b981' }}
                         >
                           <span className="material-symbols-outlined text-[24px]">check</span>
@@ -63,7 +81,7 @@ export default function InvestigationProgress({
                           <div className="relative w-12 h-12 rounded-full bg-primary-container text-on-primary shadow-md flex items-center justify-center ring-4 ring-primary-fixed">
                             <span
                               className="material-symbols-outlined text-[24px] animate-spin"
-                              style={{ animationDuration: '4s' }}
+                              style={{ animationDuration: '3s' }}
                             >
                               auto_awesome
                             </span>
@@ -84,26 +102,28 @@ export default function InvestigationProgress({
                             : 'text-on-surface-variant'
                         }`}
                       >
-                        {stage.name}
+                        <DemoValue real={null} demo={stage.name} />
                       </span>
                       <span
                         className={`font-code-sm text-code-sm mt-1 text-center ${
                           isCurrent
                             ? 'text-primary font-medium'
+                            : isCompleted
+                            ? 'text-emerald-700 font-medium'
                             : 'text-on-surface-variant/70'
                         }`}
                       >
-                        {stage.subtext}
+                        {isCompleted ? 'Validated' : <DemoValue real={null} demo={stage.subtext} />}
                       </span>
                     </div>
 
                     {/* Chevron Divider */}
-                    {idx < PROGRESS_STAGES.length - 1 && (
+                    {idx < DEMO_PROGRESS_STAGES.length - 1 && (
                       <div
                         className={`flex items-center justify-center pt-4 px-2 ${
-                          idx < activeStageIndex
-                            ? 'text-on-surface-variant/40'
-                            : idx === activeStageIndex
+                          isCompleted
+                            ? 'text-emerald-500'
+                            : isCurrent
                             ? 'text-primary-container'
                             : 'text-outline-variant'
                         }`}
@@ -133,21 +153,21 @@ export default function InvestigationProgress({
                     strokeWidth="4"
                   />
                   <circle
-                    className="text-primary-container animate-pulse"
+                    className={`transition-all duration-500 ${isSuccess ? 'text-emerald-500' : 'text-primary-container animate-pulse'}`}
                     cx="32"
                     cy="32"
                     fill="transparent"
                     r="28"
                     stroke="currentColor"
                     strokeDasharray="175"
-                    strokeDashoffset="65"
+                    strokeDashoffset={isSuccess ? '0' : '65'}
                     strokeLinecap="round"
                     strokeWidth="4"
                   />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="material-symbols-outlined text-[22px] text-primary-container">
-                    psychology
+                  <span className={`material-symbols-outlined text-[22px] ${isSuccess ? 'text-emerald-600' : 'text-primary-container'}`}>
+                    {isSuccess ? 'check_circle' : 'psychology'}
                   </span>
                 </div>
               </div>
@@ -155,13 +175,15 @@ export default function InvestigationProgress({
               {/* Text Info */}
               <div className="flex flex-col gap-1">
                 <div className="flex items-center gap-space-xs">
-                  <h3 className="font-headline-md text-headline-md text-on-surface">
-                    This may take 30–60 seconds...
+                  <h3 className="font-headline-md text-headline-md text-on-surface font-semibold">
+                    {isSuccess ? 'Investigation Results Ready!' : 'Investigation in progress...'}
                   </h3>
-                  <span className="w-1.5 h-1.5 rounded-full bg-primary-container animate-ping"></span>
+                  {!isSuccess && <span className="w-1.5 h-1.5 rounded-full bg-primary-container animate-ping"></span>}
                 </div>
                 <p className="font-body-md text-body-md text-on-surface-variant">
-                  You can leave this page. We'll notify you when the results are ready.
+                  {isSuccess
+                    ? 'Output record saved to database. Redirecting to investigation results...'
+                    : 'Awaiting execution response from n8n workflow webhook.'}
                 </p>
                 <div className="flex items-center gap-space-md mt-space-xs text-on-surface-variant font-code-sm text-code-sm flex-wrap">
                   <span className="inline-flex items-center gap-1">
@@ -171,7 +193,8 @@ export default function InvestigationProgress({
                   <span>•</span>
                   <span className="inline-flex items-center gap-1">
                     <span className="material-symbols-outlined text-[14px] text-primary">memory</span>
-                    Active Agent: Causal-Reasoner-v4
+                    Active Agent:{' '}
+                    <DemoValue real={null} demo="Causal-Reasoner-v4" />
                   </span>
                 </div>
               </div>
@@ -198,18 +221,26 @@ export default function InvestigationProgress({
             </div>
           </div>
 
-          {/* Convenient Advance Action Button */}
-          <div className="flex justify-between items-center pt-space-xs">
-            <button
-              onClick={onAbort}
-              className="text-on-surface-variant hover:text-error text-xs font-medium cursor-pointer inline-flex items-center gap-1"
-            >
-              <span className="material-symbols-outlined text-[16px]">cancel</span>
-              <span>Cancel Run</span>
-            </button>
+          {/* Action Buttons */}
+          <div className="flex flex-col sm:flex-row justify-between items-center pt-space-xs gap-3">
+            <div className="flex items-center gap-2 flex-wrap">
+              <button
+                onClick={onAbort}
+                className="text-on-surface-variant hover:text-error text-xs font-medium cursor-pointer inline-flex items-center gap-1"
+                type="button"
+              >
+                <span className="material-symbols-outlined text-[16px]">cancel</span>
+                <span>Cancel Run</span>
+              </button>
+              <span className="text-on-surface-variant/70 text-[11px]">
+                (Aborting stops waiting; n8n may still finish the run.)
+              </span>
+            </div>
             <button
               onClick={onComplete}
-              className="inline-flex items-center gap-space-xs px-space-lg py-2 rounded-lg bg-primary text-on-primary font-headline-sm text-headline-sm hover:bg-primary-container transition-all shadow-sm cursor-pointer"
+              disabled={!isSuccess}
+              className="inline-flex items-center gap-space-xs px-space-lg py-2 rounded-lg bg-primary text-on-primary font-headline-sm text-headline-sm hover:bg-primary-container transition-all shadow-sm cursor-pointer font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+              type="button"
             >
               <span>View Results Now</span>
               <span className="material-symbols-outlined text-[18px]">arrow_forward</span>

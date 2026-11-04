@@ -1,40 +1,104 @@
-import React, { useState } from 'react';
-import { RCA_REPORT_DATA } from '../services/investigationService';
-import { EVIDENCE_ITEMS } from '../services/evidenceService';
+import React, { useState, useEffect } from 'react';
+import { DEMO_RCA_REPORT, DEMO_TIMELINE_ENTRIES } from '../demo/demoData';
+import DemoValue from '../components/DemoValue';
+import EvidenceChip from '../components/EvidenceChip';
+import { fetchEvidenceForIncident } from '../services/evidenceService';
+import { formatUtcDateTime } from './IncidentSelection';
 
 export default function RCAReport({
+  incident,
+  investigationOutput,
+  hypotheses: rawHypotheses,
+  evidenceIndex: rawEvidenceIndex,
   onRestartInvestigation,
   onViewEvidence
 }) {
+  const hypotheses = Array.isArray(rawHypotheses) ? rawHypotheses : [];
+  const evidenceIndex = rawEvidenceIndex || new Map();
   const [activeTab, setActiveTab] = useState('summary');
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
+  const [realEvidence, setRealEvidence] = useState([]);
 
-  const report = RCA_REPORT_DATA;
+  const incidentId = incident?.incident_id || '—';
+  const report = DEMO_RCA_REPORT;
+
+  const hasRealInvestigation = Boolean(investigationOutput && Array.isArray(hypotheses) && hypotheses.length > 0);
+  const rank1 = hasRealInvestigation ? hypotheses[0] : null;
+
+  useEffect(() => {
+    if (!incident?.incident_id) return;
+    let isMounted = true;
+    fetchEvidenceForIncident(incident.incident_id).then(({ data, error }) => {
+      if (!isMounted) return;
+      if (!error && data) {
+        setRealEvidence(data);
+      }
+    });
+    return () => { isMounted = false; };
+  }, [incident?.incident_id]);
+
+  // Map rank 1 diagnostic next steps into action list
+  const recommendedActionList = hasRealInvestigation
+    ? (rank1?.diagnostic_next_steps && rank1.diagnostic_next_steps.length > 0
+        ? rank1.diagnostic_next_steps.map((step) => ({
+            title: step,
+            subtext: 'Diagnostic verification procedure',
+            priority: '—'
+          }))
+        : [])
+    : report.recommendedActions;
+
+  // Rank 1 supporting evidence items via evidence index
+  const supportingEvidenceItems = hasRealInvestigation && rank1?.supporting_evidence_ids
+    ? rank1.supporting_evidence_ids.map((id) => {
+        const row = evidenceIndex.get(id);
+        return row || {
+          evidence_id: id,
+          source_type: 'artifact',
+          service: incident?.affected_service || 'service',
+          event_timestamp: null,
+          isMissing: true
+        };
+      })
+    : realEvidence;
 
   const handleDownload = (format = 'pdf') => {
     setIsDownloadOpen(false);
     let content = '';
-    let filename = `RCA_Report_${report.incidentId}.${format}`;
+    let filename = `RCA_Report_${incidentId}.${format}`;
     let mimeType = 'text/plain';
 
+    const rootCause = hasRealInvestigation ? (rank1?.hypothesis || report.primaryRootCause) : report.primaryRootCause;
+    const confidenceText = hasRealInvestigation ? '—' : `${report.confidenceScore} (${report.confidence})`;
+
     if (format === 'json') {
-      content = JSON.stringify(report, null, 2);
+      content = JSON.stringify({
+        incident_id: incidentId,
+        service: incident?.affected_service,
+        primaryRootCause: rootCause,
+        confidence: confidenceText,
+        recommendedActions: recommendedActionList,
+        supportingEvidence: hasRealInvestigation ? rank1?.supporting_evidence_ids : report.keyFindings
+      }, null, 2);
       mimeType = 'application/json';
     } else if (format === 'md') {
-      content = `# Root Cause Analysis: ${report.incidentId}
-**Primary Root Cause:** ${report.primaryRootCause}
-**Confidence:** ${report.confidenceScore} (${report.confidence})
+      content = `# Root Cause Analysis: ${incidentId}
+**Service:** ${incident?.affected_service || '—'}
+**Primary Root Cause:** ${rootCause}
+**Confidence:** ${confidenceText}
+
+## Approved by Incident Commander with — confidence score.
 
 ## Key Findings
 ${report.keyFindings.map(f => `- **${f.title}**: ${f.subtext}`).join('\n')}
 
-## Recommended Actions
-${report.recommendedActions.map(a => `- **${a.title}**: ${a.subtext}`).join('\n')}
+## Recommended Diagnostic Actions
+${recommendedActionList.map(a => `- **${a.title}**: ${a.subtext}`).join('\n')}
 `;
       mimeType = 'text/markdown';
     } else {
-      content = `ROOTIQ POSTMORTEM REPORT - ${report.incidentId}\n\nPRIMARY ROOT CAUSE:\n${report.primaryRootCause}\n\nKEY FINDINGS:\n${report.keyFindings.map(f => `• ${f.title}: ${f.subtext}`).join('\n')}\n\nRECOMMENDED ACTIONS:\n${report.recommendedActions.map(a => `• ${a.title}: ${a.subtext}`).join('\n')}`;
-      filename = `RCA_Report_${report.incidentId}.txt`;
+      content = `ROOTIQ POSTMORTEM REPORT - ${incidentId}\nSERVICE: ${incident?.affected_service || '—'}\n\nPRIMARY ROOT CAUSE:\n${rootCause}\nCONFIDENCE: ${confidenceText}\n(Approved by Incident Commander with — confidence score)\n\nKEY FINDINGS:\n${report.keyFindings.map(f => `• ${f.title}: ${f.subtext}`).join('\n')}\n\nRECOMMENDED ACTIONS:\n${recommendedActionList.map(a => `• ${a.title}: ${a.subtext}`).join('\n')}`;
+      filename = `RCA_Report_${incidentId}.txt`;
     }
 
     const blob = new Blob([content], { type: mimeType });
@@ -48,7 +112,7 @@ ${report.recommendedActions.map(a => `- **${a.title}**: ${a.subtext}`).join('\n'
 
   return (
     <div className="flex flex-col w-full gap-space-xl max-w-6xl mx-auto">
-      {/* Top Banner matching screen_c078b124.png */}
+      {/* Top Banner matching approved Stitch screen */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-space-md">
         <div className="flex items-center gap-space-md flex-wrap">
           <div className="w-7 h-7 rounded-full bg-blue-50 text-primary flex items-center justify-center shrink-0">
@@ -60,10 +124,10 @@ ${report.recommendedActions.map(a => `- **${a.title}**: ${a.subtext}`).join('\n'
             </span>
           </div>
           <h1 className="font-headline-xl text-headline-lg sm:text-headline-xl text-on-surface font-bold tracking-tight">
-            INC-001 • RCA Report Ready
+            {incidentId} • RCA Report Ready
           </h1>
           <span className="text-on-surface-variant font-body-md text-sm">
-            Resolved in production
+            Resolved in {incident?.environment || 'staging'}
           </span>
         </div>
 
@@ -107,7 +171,7 @@ ${report.recommendedActions.map(a => `- **${a.title}**: ${a.subtext}`).join('\n'
         </div>
       </div>
 
-      {/* Horizontal Interactive Tab Navigation matching screen_c078b124.png */}
+      {/* Horizontal Interactive Tab Navigation */}
       <div className="flex items-center gap-space-lg border-b border-surface-container-high/60 overflow-x-auto no-scrollbar pt-2">
         <button
           onClick={() => setActiveTab('summary')}
@@ -158,7 +222,7 @@ ${report.recommendedActions.map(a => `- **${a.title}**: ${a.subtext}`).join('\n'
         </button>
       </div>
 
-      {/* Tab 1: Summary matching screen_c078b124.png */}
+      {/* Tab 1: Summary */}
       {activeTab === 'summary' && (
         <div className="flex flex-col gap-space-lg">
           {/* Primary Root Cause Spotlight Callout */}
@@ -170,13 +234,17 @@ ${report.recommendedActions.map(a => `- **${a.title}**: ${a.subtext}`).join('\n'
               </span>
             </div>
             <p className="font-headline-md text-headline-sm md:text-headline-md text-on-surface font-semibold leading-relaxed">
-              Database connection pool capacity was reduced during deployment, contributing to database timeouts.
+              {hasRealInvestigation ? (
+                rank1?.hypothesis
+              ) : (
+                <DemoValue real={null} demo={report.primaryRootCause} />
+              )}
             </p>
           </div>
 
-          {/* Two-Column Grid: Key Findings & Recommended Actions matching screen_c078b124.png */}
+          {/* Two-Column Grid: Key Findings & Recommended Actions */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-space-lg">
-            {/* Left Column: Key Findings */}
+            {/* Left Column: Key Findings (Phase 4 finishes this; MTTD, MTTR, key findings stay demo) */}
             <div className="flex flex-col bg-surface-container-lowest rounded-xl p-space-xl shadow-xs border border-surface-container-high/40">
               <div className="flex items-center justify-between pb-space-md border-b border-surface-container-high/40">
                 <div className="flex items-center gap-space-sm">
@@ -195,10 +263,10 @@ ${report.recommendedActions.map(a => `- **${a.title}**: ${a.subtext}`).join('\n'
                     </div>
                     <div className="flex flex-col">
                       <span className="font-headline-sm text-sm text-on-surface font-semibold">
-                        {finding.title}
+                        <DemoValue real={null} demo={finding.title} />
                       </span>
                       <span className="font-body-sm text-xs text-on-surface-variant">
-                        {finding.subtext}
+                        <DemoValue real={null} demo={finding.subtext} />
                       </span>
                     </div>
                   </div>
@@ -206,7 +274,7 @@ ${report.recommendedActions.map(a => `- **${a.title}**: ${a.subtext}`).join('\n'
               </div>
             </div>
 
-            {/* Right Column: Recommended Actions */}
+            {/* Right Column: Recommended Actions (Rank 1 diagnostic_next_steps, priority "—") */}
             <div className="flex flex-col bg-surface-container-lowest rounded-xl p-space-xl shadow-xs border border-surface-container-high/40">
               <div className="flex items-center justify-between pb-space-md border-b border-surface-container-high/40">
                 <div className="flex items-center gap-space-sm">
@@ -214,38 +282,62 @@ ${report.recommendedActions.map(a => `- **${a.title}**: ${a.subtext}`).join('\n'
                   <h3 className="font-headline-md text-headline-sm font-semibold text-on-surface">Recommended Actions</h3>
                 </div>
                 <span className="font-label-sm text-xs text-on-surface-variant uppercase tracking-wider font-semibold">
-                  MITIGATIONS
+                  DIAGNOSTICS
                 </span>
               </div>
               <div className="flex flex-col gap-space-md pt-space-md">
-                {report.recommendedActions.map((action, idx) => (
-                  <div key={idx} className="flex items-start gap-space-md">
-                    <div className="w-5 h-5 rounded-full bg-blue-50 text-primary flex items-center justify-center shrink-0 mt-0.5">
-                      <span className="material-symbols-outlined text-[14px]">check</span>
+                {hasRealInvestigation ? (
+                  recommendedActionList.length > 0 ? (
+                    recommendedActionList.map((action, idx) => (
+                      <div key={idx} className="flex items-start gap-space-md">
+                        <div className="w-5 h-5 rounded-full bg-blue-50 text-primary flex items-center justify-center shrink-0 mt-0.5">
+                          <span className="material-symbols-outlined text-[14px]">check</span>
+                        </div>
+                        <div className="flex flex-col">
+                          <span className="font-headline-sm text-sm text-on-surface font-semibold">
+                            {action.title}
+                          </span>
+                          <span className="font-body-sm text-xs text-on-surface-variant">
+                            {action.subtext}
+                          </span>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-xs text-on-surface-variant italic py-2">—</div>
+                  )
+                ) : (
+                  report.recommendedActions.map((action, idx) => (
+                    <div key={idx} className="flex items-start gap-space-md">
+                      <div className="w-5 h-5 rounded-full bg-blue-50 text-primary flex items-center justify-center shrink-0 mt-0.5">
+                        <span className="material-symbols-outlined text-[14px]">check</span>
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="font-headline-sm text-sm text-on-surface font-semibold">
+                          <DemoValue real={null} demo={action.title} />
+                        </span>
+                        <span className="font-body-sm text-xs text-on-surface-variant">
+                          <DemoValue real={null} demo={action.subtext} />
+                        </span>
+                      </div>
                     </div>
-                    <div className="flex flex-col">
-                      <span className="font-headline-sm text-sm text-on-surface font-semibold">
-                        {action.title}
-                      </span>
-                      <span className="font-body-sm text-xs text-on-surface-variant">
-                        {action.subtext}
-                      </span>
-                    </div>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* Tab 2: Evidence */}
+      {/* Tab 2: Evidence (Rank 1 supporting evidence items via evidenceIndex) */}
       {activeTab === 'evidence' && (
         <div className="bg-surface-container-lowest rounded-xl p-space-xl shadow-xs flex flex-col gap-space-md border border-surface-container-high/40">
           <div className="flex items-center justify-between pb-space-sm border-b border-surface-container-high/60">
-            <h3 className="font-headline-md text-headline-sm font-semibold text-on-surface">Referenced Evidence Dossier</h3>
+            <h3 className="font-headline-md text-headline-sm font-semibold text-on-surface">
+              {hasRealInvestigation ? 'Primary Supporting Evidence Dossier' : 'Referenced Evidence Dossier'}
+            </h3>
             <button
-              onClick={onViewEvidence}
+              onClick={() => onViewEvidence && onViewEvidence()}
               className="text-primary hover:underline font-label-md text-xs font-semibold inline-flex items-center gap-1 cursor-pointer"
             >
               <span>Inspect in Evidence Details Explorer</span>
@@ -253,20 +345,30 @@ ${report.recommendedActions.map(a => `- **${a.title}**: ${a.subtext}`).join('\n'
             </button>
           </div>
           <div className="grid grid-cols-1 divide-y divide-surface-container-high/50 font-body-sm text-body-sm">
-            {EVIDENCE_ITEMS.slice(0, 6).map((item) => (
-              <div key={item.id} className="py-3 flex items-center justify-between flex-wrap gap-2">
-                <div className="flex items-center gap-3">
-                  <span className="font-code-sm text-code-sm font-bold text-primary bg-blue-50 px-2 py-0.5 rounded">
-                    {item.id}
+            {supportingEvidenceItems.length > 0 ? (
+              supportingEvidenceItems.map((item) => (
+                <div
+                  key={item.evidence_id}
+                  onClick={() => onViewEvidence && onViewEvidence(item.evidence_id)}
+                  className="py-3 flex items-center justify-between flex-wrap gap-2 hover:bg-surface-container-low px-2 rounded-lg transition-colors cursor-pointer"
+                >
+                  <div className="flex items-center gap-3">
+                    <EvidenceChip id={item.evidence_id} evidenceIndex={evidenceIndex} onOpen={onViewEvidence} />
+                    <span className="px-2 py-0.5 rounded-full bg-surface-container text-on-surface font-semibold text-xs capitalize">
+                      {item.source_type}
+                    </span>
+                    <span className="font-medium text-on-surface">{item.source_type} · {item.service}</span>
+                  </div>
+                  <span className="text-on-surface-variant text-xs">
+                    {item.event_timestamp ? formatUtcDateTime(item.event_timestamp) : '—'}
                   </span>
-                  <span className="px-2 py-0.5 rounded-full bg-surface-container text-on-surface font-semibold text-xs">
-                    {item.category}
-                  </span>
-                  <span className="font-medium text-on-surface">{item.title}</span>
                 </div>
-                <span className="text-on-surface-variant text-xs">{item.timestamp}</span>
+              ))
+            ) : (
+              <div className="py-4 text-center text-on-surface-variant italic">
+                No supporting evidence items linked.
               </div>
-            ))}
+            )}
           </div>
         </div>
       )}
@@ -278,48 +380,55 @@ ${report.recommendedActions.map(a => `- **${a.title}**: ${a.subtext}`).join('\n'
             Incident Sequence Timeline
           </h3>
           <div className="flex flex-col gap-space-md pl-4 border-l-2 border-primary/30 my-2">
-            <div className="relative pl-4">
-              <span className="absolute -left-[21px] top-1 w-3 h-3 rounded-full bg-primary ring-4 ring-surface-container-lowest"></span>
-              <span className="font-code-sm text-xs text-primary font-bold">10:12 AM UTC</span>
-              <p className="font-headline-sm text-sm text-on-surface font-semibold">Deployment v1.8.3 canary rolled out</p>
-              <p className="text-on-surface-variant text-xs">Commit #9c0f4d1 adjusted HikariCP pool capacity to 20.</p>
-            </div>
-            <div className="relative pl-4">
-              <span className="absolute -left-[21px] top-1 w-3 h-3 rounded-full bg-error ring-4 ring-surface-container-lowest"></span>
-              <span className="font-code-sm text-xs text-error font-bold">10:15 AM UTC</span>
-              <p className="font-headline-sm text-sm text-on-surface font-semibold">p95 Latency surged past 1,000ms</p>
-              <p className="text-on-surface-variant text-xs">Database client socket queue depth reached 142 waiting connections.</p>
-            </div>
-            <div className="relative pl-4">
-              <span className="absolute -left-[21px] top-1 w-3 h-3 rounded-full bg-emerald-600 ring-4 ring-surface-container-lowest"></span>
-              <span className="font-code-sm text-xs text-emerald-600 font-bold">10:28 AM UTC</span>
-              <p className="font-headline-sm text-sm text-on-surface font-semibold">RootIQ Causal Engine identified root cause</p>
-              <p className="text-on-surface-variant text-xs">Approved by Incident Commander Ayswarya with 82% confidence score.</p>
-            </div>
+            {DEMO_TIMELINE_ENTRIES.map((entry, idx) => (
+              <div key={idx} className="relative pl-4">
+                <span className={`absolute -left-[21px] top-1 w-3 h-3 rounded-full ring-4 ring-surface-container-lowest ${
+                  entry.color === 'error' ? 'bg-error' : entry.color === 'emerald-600' ? 'bg-emerald-600' : 'bg-primary'
+                }`}></span>
+                <span className={`font-code-sm text-xs font-bold ${
+                  entry.color === 'error' ? 'text-error' : entry.color === 'emerald-600' ? 'text-emerald-600' : 'text-primary'
+                }`}>
+                  <DemoValue real={null} demo={entry.time} />
+                </span>
+                <p className="font-headline-sm text-sm text-on-surface font-semibold">
+                  <DemoValue real={null} demo={entry.title} />
+                </p>
+                <p className="text-on-surface-variant text-xs">
+                  <DemoValue real={null} demo={entry.subtext} />
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       )}
 
-      {/* Tab 4: Actions */}
+      {/* Tab 4: Actions (Priority badges "P0/P1/P2" -> "—" when real) */}
       {activeTab === 'actions' && (
         <div className="bg-surface-container-lowest rounded-xl p-space-xl shadow-xs flex flex-col gap-space-md border border-surface-container-high/40">
           <h3 className="font-headline-md text-headline-sm font-semibold text-on-surface pb-space-sm border-b border-surface-container-high/60">
             Action Item Tracker
           </h3>
           <div className="flex flex-col gap-3">
-            {report.recommendedActions.map((action, i) => (
+            {recommendedActionList.map((action, i) => (
               <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-surface-container-low border border-surface-container">
                 <div className="flex items-center gap-3">
                   <span className="w-5 h-5 rounded border border-primary text-primary flex items-center justify-center text-xs font-bold">
                     ✓
                   </span>
                   <div>
-                    <span className="font-semibold text-on-surface">{action.title}</span>
-                    <p className="text-xs text-on-surface-variant">{action.subtext}</p>
+                    <span className="font-semibold text-on-surface">
+                      {hasRealInvestigation ? action.title : <DemoValue real={null} demo={action.title} />}
+                    </span>
+                    <p className="text-xs text-on-surface-variant">
+                      {hasRealInvestigation ? action.subtext : <DemoValue real={null} demo={action.subtext} />}
+                    </p>
                   </div>
                 </div>
-                <span className="font-code-sm text-xs px-2 py-0.5 rounded bg-surface-container-high text-primary font-bold">
-                  {action.priority}
+                <span
+                  className="font-code-sm text-xs px-2 py-0.5 rounded bg-surface-container-high text-primary font-bold cursor-help"
+                  title={hasRealInvestigation ? 'Not provided by the investigation engine' : undefined}
+                >
+                  {hasRealInvestigation ? '—' : <DemoValue real={null} demo={action.priority} />}
                 </span>
               </div>
             ))}
@@ -331,7 +440,8 @@ ${report.recommendedActions.map(a => `- **${a.title}**: ${a.subtext}`).join('\n'
       <div className="flex justify-end pt-space-xs">
         <button
           onClick={onRestartInvestigation}
-          className="inline-flex items-center gap-1.5 text-xs text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
+          className="inline-flex items-center gap-1.5 text-xs text-on-surface-variant hover:text-primary transition-colors cursor-pointer font-medium"
+          type="button"
         >
           <span className="material-symbols-outlined text-[16px]">refresh</span>
           <span>Start New Incident Investigation</span>
